@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="bling.com.mapper.reviewMapper">
+
+	<!-- 상품의 pidx에 따라서 리뷰 갯수 가져오기  parameterType="int" -->
+	<select id="reviewCount"  resultType="int">
+		SELECT count(r.ridx) as reviewCount FROM bg_review r
+    	JOIN bg_order_detail od on r.detail_idx = od.detail_idx
+	    JOIN bg_option o on o.oidx = od.oidx
+	    Join bg_user u on u.midx = r.midx
+	    WHERE o.pidx = 3
+	</select>
+	
+	<!-- 페이징된 리뷰 가져오기 -->
+	<select id="reviewPaging"  parameterType="PageMaker" resultType="CombineVO">
+	<![CDATA[
+	select * from 
+    ( select rownum as rnum, A.* from
+        (SELECT r.contents, r.rdate, r.image1, r.image2, r.grade, u.uname FROM bg_review r
+        JOIN bg_order_detail od on r.detail_idx = od.detail_idx
+        JOIN bg_option o on o.oidx = od.oidx
+        Join bg_user u on u.midx = r.midx
+        WHERE o.pidx = 3
+        order by o.pidx desc ) A 
+     where rownum <= #{lastPost} ) B
+ 	where rnum >= #{startPost}
+ 	]]>
+ 	</select>
+</mapper>

@@ -1,0 +1,16 @@
+package bling.com.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import bling.com.dao.OrderDAO;
+
+@Service("OrderService")
+public class OrderServiceImpl implements OrderService {
+
+	@Autowired
+	OrderDAO orderDAO;
+	
+	
+	
+}

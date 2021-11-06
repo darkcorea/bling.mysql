@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0/EN"
+				"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<typeAliases>
+        <typeAlias type="bling.com.vo.Address_listVO" alias="Address_listVO"/>
+        <typeAlias type="bling.com.vo.AdminVO" alias="AdminVO"/> 
+        <typeAlias type="bling.com.vo.CartVO" alias="CartVO"/> 
+        <typeAlias type="bling.com.vo.DeliveryVO" alias="DeliveryVO"/> 
+        <typeAlias type="bling.com.vo.EventVO" alias="EventVO"/> 
+        <typeAlias type="bling.com.vo.ImageVO" alias="ImageVO"/> 
+        <typeAlias type="bling.com.vo.LikeVO" alias="LikeVO"/> 
+        <typeAlias type="bling.com.vo.NoticeVO" alias="NoticeVO"/> 
+        <typeAlias type="bling.com.vo.OptionVO" alias="OptionVO"/> 
+        <typeAlias type="bling.com.vo.Order_detailVO" alias="Order_detailVO"/> 
+        <typeAlias type="bling.com.vo.OrderVO" alias="OrderVO"/> 
+        <typeAlias type="bling.com.vo.ProductVO" alias="ProductVO"/> 
+        <typeAlias type="bling.com.vo.Question_commentVO" alias="Question_commentVO"/> 
+        <typeAlias type="bling.com.vo.QuestionVO" alias="QuestionVO"/> 
+        <typeAlias type="bling.com.vo.ReviewVO" alias="ReviewVO"/> 
+        <typeAlias type="bling.com.vo.User_gradeVO" alias="User_gradeVO"/> 
+        <typeAlias type="bling.com.vo.UserVO" alias="UserVO"/> 
+        <typeAlias type="bling.com.vo.CombineVO" alias="CombineVO"/> 
+        <!-- 페이징과 검색에 관한 VO  -->
+        <typeAlias type="bling.com.domain.Criteria" alias="Criteria"/> 
+        <typeAlias type="bling.com.domain.PageMaker" alias="PageMaker"/> 
+    </typeAliases>
+
+</configuration>
