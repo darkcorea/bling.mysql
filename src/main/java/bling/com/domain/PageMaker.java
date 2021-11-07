@@ -10,23 +10,32 @@ public class PageMaker {
 	private int endPage;		// 네이게이션 바의 끝 번호
 	private int displayPageNum =10;	//화면아래에 표현될 게시판 보드의 개수 (게시글들이 모여있는 게시판 보드)
 	private int startPost;		// 가져올 페이지 시작 번호
-	private int lastPost;		// 가져올 페이지 마지막 번호
+	private int perPageNum;		// 가져올 페이지의 객수
 	private boolean prev;		// 이전 버튼
 	private boolean next;		// 다음 버튼
 	private Criteria scri;			// 페이지와 화면에 표현될 게시글의 숫자 값이 담긴 클래스, 서치 할 떄도 사용가능
+	// 물건 pidx 추가.
+	// 여기에 추가하는 것 말고 다른 방법있는 사람 찾습니다.
+	private int pidx;
 	
 	
+	public int getPidx() {
+		return pidx;
+	}
+	public void setPidx(int pidx) {
+		this.pidx = pidx;
+	}
+	public int getPerPageNum() {
+		return perPageNum;
+	}
+	public void setPerPageNum(int perPageNum) {
+		this.perPageNum = perPageNum;
+	}
 	public int getStartPost() {
 		return startPost;
 	}
 	public void setStartPost(int startPost) {
 		this.startPost = startPost;
-	}
-	public int getLastPost() {
-		return lastPost;
-	}
-	public void setLastPost(int lastPost) {
-		this.lastPost = lastPost;
 	}
 	
 	public int getStartPage() {
@@ -90,7 +99,7 @@ public class PageMaker {
 		startPage = (endPage - displayPageNum)+1;
 	
 		startPost = (int)(((scri.getPage()-1)*scri.getPerPageNum())+1);	// 가져오는 페이지 중에 시작하는 페이지 번호
-		lastPost = (int)(scri.getPage()*scri.getPerPageNum());		// 가져오는 페이지 중에서 마지막 페이지 번호
+		perPageNum = (int)(scri.getPerPageNum());		// 가져오는 페이지 중에서 마지막 페이지 번호
 		
 
 		// 전체 게시글에 대한 마지막 페이지 = 올림(모든 게시판글의 숫자 / 게시판에 보현될 게시글의 갯수) : 마지막 페이지는 있어야 하므로

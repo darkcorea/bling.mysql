@@ -10,6 +10,7 @@ import bling.com.vo.ImageVO;
 import bling.com.vo.CombineVO;
 import bling.com.vo.OptionVO;
 import bling.com.vo.ProductVO;
+import bling.com.vo.ReviewVO;
 
 @Repository
 public class ProductDAO {
@@ -69,13 +70,10 @@ public class ProductDAO {
 	public ImageVO image(int pidx) throws Exception{
 		return sqlSession.selectOne(pm+"imageProduct", pidx);
 	}
-	// 상품 pidx로 상품의 리뷰들 최신순으로 가져오기
-	public List<CombineVO> reviewProduct_1(int pidx) throws Exception{
-		return sqlSession.selectList(pm+"reviewProduct_1", pidx);
-	}
-	// 상품 pidx로 상품의 리뷰들 평점 높은순으로 가져오기
-	public List<CombineVO> reviewProduct_2(int pidx) throws Exception{
-		return sqlSession.selectList(pm+"reviewProduct_2", pidx);
+	
+	// 상품 pidx로 상품의 평점과 사진 가지고 오기
+	public List<ReviewVO> reviewGrade(int pidx) throws Exception{
+		return sqlSession.selectList(pm+"reviewGrade", pidx);
 	}
 	
 	

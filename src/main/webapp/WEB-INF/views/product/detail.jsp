@@ -236,7 +236,7 @@
 	}
 	
 	/* 이미지 10개 틀 */
-	.detail-review-view .review-image{
+	.detail-review-view .review-images{
 		width:500px;
 		height:200px;
 		float: right;
@@ -270,7 +270,7 @@
 상품상세 페이지입니다<br>
 <!-- 상세페이지 main -->
 상품 가격 : <c:out value="${detail.saleprice}"/> <br>
-리뷰 갯수 : <c:out value="${fn:length(review)}"/> <br>
+리뷰 갯수 : <c:out value="${fn:length(reviewGrade)}"/> <br>
 <header>
 	<%@ include file="/WEB-INF/views/header.jsp" %><BR><br>
 </header>
@@ -379,7 +379,7 @@
 	<!-- 상품설명, 후기 등 네비게이션 -->
 	<div class="detail-nav fw-bold">
 		<span class="detail-nav-1"><a id="move_info">상세정보</a></span>
-		<span class="detail-nav-1"><a href="#move_review">후기(<span><c:out value="${fn:length(review)}"/></span>)</a></span>
+		<span class="detail-nav-1"><a href="#move_review">후기(<span><c:out value="${fn:length(reviewGrade)}"/></span>)</a></span>
 		<span class="detail-nav-1"><a href="#move_question">상문문의</a></span>
 		<span class="detail-nav-1"><a href="#move_giude">구매가이드</a></span>
 	</div>
@@ -403,7 +403,7 @@
 	<!-- 상품에 관한 리뷰 -->
 	<div class="detail-nav fw-bold">
 		<span class="detail-nav-1"><a href="#move_info">상세정보</a></span>
-		<span class="detail-nav-1"><a id="move_review">후기(<span><c:out value="${fn:length(review)}"/></span>)</a></span>
+		<span class="detail-nav-1"><a id="move_review">후기(<span><c:out value="${fn:length(reviewGrade)}"/></span>)</a></span>
 		<span class="detail-nav-1"><a href="#move_question">상문문의</a></span>
 		<span class="detail-nav-1"><a href="#move_giude">구매가이드</a></span>
 	</div>
@@ -417,8 +417,9 @@
 					<div class="review-average1">
 						<span id="review-average1">0</span>
 					</div>
-					<span class="font12"><c:out value="${fn:length(review)}"/></span><span class="font12">개의 리뷰 펑점</span>
+					<span class="font12"><c:out value="${fn:length(reviewGrade)}"/></span><span class="font12">개의 리뷰 펑점</span>
 				</div>
+				
 				<!-- 리뷰 별점 텍스트 -->
 				<div class="review-score">
 				<progress id="recount5" class="file" max="100" value="0"> 50% </progress>
@@ -432,10 +433,13 @@
 				<progress id="recount1" class="file" max="100" value="0"> 50% </progress>
 				(<span class="review_sum1 font12">0</span>)
 				</div>
+				
 				<!-- 사진 10개 -->
-				<div class="review-image">
-					<c:forEach items="${review}" var="review" end="9">
-					<img class="reiview-image1 img-thumbnail" src="/resources/review_img/${review.image1}">
+				<!-- 사진이 없을 경우에 뿌려주는 방법을 찾다가. jstl로는 불가능한 걸 알고 스크립트로 뿌려 줄려다가 -->
+				<!-- 데이터베이스에서 null값을 아래로 내리는 방법을 찾아내서 매퍼를 수정함 -->
+				<div class="review-images">
+					<c:forEach items="${reviewGrade}" var="re_grade" end="9">
+					<img id="review_iamge" class="reiview-image1 img-thumbnail" src="/resources/review_img/${re_grade.image1}">
 					</c:forEach>
 				</div>
 		</div>
@@ -470,8 +474,10 @@
 					<td>리뷰</td>
 					<td></td>
 					<td>
+						<!-- 
 						<img class="reiview-image1 img-thumbnail" src="/resources/review_img/ring_main_1.jpg">
 						<img class="reiview-image1 img-thumbnail" src="/resources/review_img/ring_main_1.jpg">
+						-->
 					</td>
 					<td></td>
 					<td>유광*</td>
@@ -499,7 +505,7 @@
 	<!-- 상품에 관한 문의 -->
 	<div class="detail-nav fw-bold">
 		<span class="detail-nav-1"><a href="#move_info">상세정보</a></span>
-		<span class="detail-nav-1"><a href="#move_info">후기(<span><c:out value="${fn:length(review)}"/></span>)</a></span>
+		<span class="detail-nav-1"><a href="#move_info">후기(<span><c:out value="${fn:length(reviewGrade)}"/></span>)</a></span>
 		<span class="detail-nav-1"><a id="move_question">상문문의</a></span>
 		<span class="detail-nav-1"><a href="#move_giude">구매가이드</a></span>
 	</div>
@@ -510,7 +516,7 @@
 	<!-- 상품구매에 대한 가이드 -->
 	<div class="detail-nav fw-bold">
 		<span class="detail-nav-1"><a href="#move_info">상세정보</a></span>
-		<span class="detail-nav-1"><a href="#move_info">후기(<span><c:out value="${fn:length(review)}"/></span>)</a></span>
+		<span class="detail-nav-1"><a href="#move_info">후기(<span><c:out value="${fn:length(reviewGrade)}"/></span>)</a></span>
 		<span class="detail-nav-1"><a href="#move_question">상품문의</a></span>
 		<span class="detail-nav-1"><a id="move_giude">구매가이드</a></span>
 	</div>
@@ -525,143 +531,8 @@
 </footer> 
 </body>
 <script type="text/javascript">
-	$(document).ready(function(){
-	  
-	  /* 리뷰 평균과 각 리뷰 갯수 뿌려주기 */
-	  function review(){
-	   	<c:if test="${fn:length(review) != 0}">
-	    <c:set var="sum" value="0" />
-		<c:set var="sum5" value="0" />
-		<c:set var="sum4" value="0" />
-		<c:set var="sum3" value="0" />
-		<c:set var="sum2" value="0" />
-		<c:set var="sum1" value="0" />
-		
-		 // 리뷰 평점별 합계 구하기
-	    <c:forEach items="${review}" var="review">
-	    <c:set var="sum" value="${review.grade + sum}"/>
-	    
-	    <c:if test="${review.grade == 5}">
-	    <c:set var="sum5" value="${review.grade + sum5}"/>
-	    </c:if>
-	    
-		<c:if test="${review.grade == 4}">
-		<c:set var="sum4" value="${review.grade + sum4}"/>
-	    </c:if>
-	    
-		<c:if test="${review.grade == 3}">
-		<c:set var="sum3" value="${review.grade + sum3}"/>
-	    </c:if>
-	    
-		<c:if test="${review.grade == 2}">
-		<c:set var="sum2" value="${review.grade + sum2}"/>
-	    </c:if>
-	    
-		<c:if test="${review.grade == 1}">
-		<c:set var="sum1" value="${review.grade + sum1}"/>
-	    </c:if>
-	    </c:forEach>
-	    
-	    // 리뷰 평점 합계 구하기
-	    let sum = <c:out value="${sum}"/>;
-	    let sum5 = <c:out value="${sum5}"/>;
-	    let sum4 = <c:out value="${sum4}"/>;
-	    let sum3 = <c:out value="${sum3}"/>;
-	    let sum2 = <c:out value="${sum2}"/>;
-	    let sum1 = <c:out value="${sum1}"/>;
-	    //console.log(sum);
-	    
-	    // 리뷰 평점 소수점 2자리에서 반올림 하기
-	    let length = <c:out value="${fn:length(review)}"/>;
-	    let average = (sum / length).toFixed(1) ;
-	    //console.log(average);
-	    
-	    // 리뷰 평점별 갯수 구하기
-	    let average5 = (sum5 / 5);
-	    let average4 = (sum4 / 4);
-	    let average3 = (sum3 / 3);
-	    let average2 = (sum2 / 2);
-	    let average1 = (sum1 / 1);
-	    
-	    // 리뷰 점수별 퍼센트 구하기, 소수점 1자리에서 반올림 하기
-	    let percent5 = Math.round((average5/length)*100);
-	    let percent4 = Math.round((average4/length)*100);
-	    let percent3 = Math.round((average3/length)*100);
-	    let percent2 = Math.round((average2/length)*100);
-	    let percent1 = Math.round((average1/length)*100);
-/* 	    console.log(percent5);
-	    console.log(percent4);
-	    console.log(percent3);
-	    console.log(percent2);
-	    console.log(percent1); */
-	    
-	    // 리뷰 평균과 리뷰 갯수 뿌려주기
-	    $("#review-average1").text(average);
-	    $(".review_sum5").text(average5);
-	    $(".review_sum4").text(average4);
-	    $(".review_sum3").text(average3);
-	    $(".review_sum2").text(average2);
-	    $(".review_sum1").text(average1);
-	    
-	    // 리뷰 등급별  퍼센테이지 뿌려주기
-	    $("#recount5").val(percent5);
-	    $("#recount4").val(percent4);
-	    $("#recount3").val(percent3);
-	    $("#recount2").val(percent2);
-	    $("#recount1").val(percent1);
-	    </c:if>
-	  }
-	  review();
-	  
-	  
-	  /* 리뷰 길이가 너무 길면 더보기 버튼 보이기  */
-	  // .offsetHeight >90  보여지는 부분이 90px를 넘어가면, 보여지는 높이 조절하기 어려움 clientHeight
-	  // .length >= 100  텍스트 길이가 100보다 크거나 같으면
-	  // .split('\n').length; 줄바꿈이 되었을 때 줄바꿈 안하면 소용이 없음
-	  // word-break: keep-all; 한글일 경우 띄어쓰기 기준으로 줄바꿈 해줌 스타일로 적용
-	  $("#review_box").each(function(){
-	      let re = $("#review_box");
-	      let re_txt = $("#review_box").text();
-	      let re_height = document.getElementById("review_box").clientHeight;
-	      console.log(re_height);
-	      let re_html = $("#review_box").html();
-	      let re_txt_short = re_txt.substring(0,60)+"...";
-	      
-	      // 더보기 버튼 추가 void(0)는 이동을 하지 않고 그곳에서 만 움직이겠다는 뜻
-	      let btn_more = $('<a href="javascript:void(0)" class="more">더보기</a>');
-	      $("#review_btn").append(btn_more);
-	      
-	      // 텍스트 길이가 길면 자르고 길이가 짧으면 더보기 버튼을 감춘다.
-	      if(re_height >= 75){
-		  	re.html(re_txt_short);
-	                
-	      }else {
-	            btn_more.hide()
-	      }
-	      
-	      btn_more.click(toggle_content);
-	      
-            function toggle_content(){
-                if($(this).hasClass('short')){
-                    // 접기 상태
-                    $(this).text('더보기');
-                    re.html(re_txt_short); // 텍스트 자르기
-                    $(this).removeClass('short');
-                }else{
-                    // 더보기 상태
-                    $(this).text('접기');
-                    re.html(re_html); // 텍스트 크기 원상복귀
-                    $(this).addClass('short');
- 
-                }
-          	}
-	  });
-	  
-	  
-	  
-	});
 
-	
+	/* DOM Tree 생성 완료 후*/
 	$(function(){
 		
 		// 마우스 호버 할 시 이미지 변경 main
@@ -754,8 +625,159 @@
 			}
 		});
 		
-
 		
+		 /* 리뷰 평균과 각 리뷰 갯수 뿌려주기 */
+		  function review_Grade(){
+		   	<c:if test="${fn:length(reviewGrade) != 0}">
+		    <c:set var="sum" value="0" />
+			<c:set var="sum5" value="0" />
+			<c:set var="sum4" value="0" />
+			<c:set var="sum3" value="0" />
+			<c:set var="sum2" value="0" />
+			<c:set var="sum1" value="0" />
+			
+			 // 리뷰 평점별 합계 구하기
+		    <c:forEach items="${reviewGrade}" var="review">
+		    <c:set var="sum" value="${review.grade + sum}"/>
+		    
+		    <c:if test="${review.grade == 5}">
+		    <c:set var="sum5" value="${review.grade + sum5}"/>
+		    </c:if>
+		    
+			<c:if test="${review.grade == 4}">
+			<c:set var="sum4" value="${review.grade + sum4}"/>
+		    </c:if>
+		    
+			<c:if test="${review.grade == 3}">
+			<c:set var="sum3" value="${review.grade + sum3}"/>
+		    </c:if>
+		    
+			<c:if test="${review.grade == 2}">
+			<c:set var="sum2" value="${review.grade + sum2}"/>
+		    </c:if>
+		    
+			<c:if test="${review.grade == 1}">
+			<c:set var="sum1" value="${review.grade + sum1}"/>
+		    </c:if>
+		    </c:forEach>
+		    
+		    // 리뷰 평점 합계 구하기
+		    let sum = <c:out value="${sum}"/>;
+		    let sum5 = <c:out value="${sum5}"/>;
+		    let sum4 = <c:out value="${sum4}"/>;
+		    let sum3 = <c:out value="${sum3}"/>;
+		    let sum2 = <c:out value="${sum2}"/>;
+		    let sum1 = <c:out value="${sum1}"/>;
+		    //console.log(sum);
+		    
+		    // 리뷰 평점 소수점 2자리에서 반올림 하기
+		    let length = <c:out value="${fn:length(reviewGrade)}"/>;
+		    let average = (sum / length).toFixed(1) ;
+		    //console.log(average);
+		    
+		    // 리뷰 평점별 갯수 구하기
+		    let average5 = (sum5 / 5);
+		    let average4 = (sum4 / 4);
+		    let average3 = (sum3 / 3);
+		    let average2 = (sum2 / 2);
+		    let average1 = (sum1 / 1);
+		    
+		    // 리뷰 점수별 퍼센트 구하기, 소수점 1자리에서 반올림 하기
+		    let percent5 = Math.round((average5/length)*100);
+		    let percent4 = Math.round((average4/length)*100);
+				    let percent3 = Math.round((average3/length)*100);
+		    let percent2 = Math.round((average2/length)*100);
+		    let percent1 = Math.round((average1/length)*100);
+	/* 	    console.log(percent5);
+		    console.log(percent4);
+		    console.log(percent3);
+		    console.log(percent2);
+		    console.log(percent1); */
+		    
+		    // 리뷰 평균과 리뷰 갯수 뿌려주기
+		    $("#review-average1").text(average);
+		    $(".review_sum5").text(average5);
+		    $(".review_sum4").text(average4);
+		    $(".review_sum3").text(average3);
+		    $(".review_sum2").text(average2);
+		    $(".review_sum1").text(average1);
+		    
+		    // 리뷰 등급별  퍼센테이지 뿌려주기
+		    $("#recount5").val(percent5);
+		    $("#recount4").val(percent4);
+		    $("#recount3").val(percent3);
+		    $("#recount2").val(percent2);
+		    $("#recount1").val(percent1);
+		    </c:if>
+		  }
+		  review_Grade();
+		  
+		
+		  /* 제이쿼리를 활용해서 리뷰 뿌려주기*/
+		  function review_Fn(){
+		      let pidx =  <c:out value="${detail.pidx}"/>;
+		      $.ajax({
+			  	url:"detail_review.do",
+			    data:{"pidx":pidx},
+			    dataType: 'json',
+			  	type:"post",
+			  	success:function(data){
+			  	 console.log(data);
+			  	 console.log(data.pm.endPage);
+			  	 console.log(data.reviewProduct_1[0]);
+			  	},
+			  	error:function(){
+			  	    alert("처음 리뷰 뿌려주기 에러입니다.");
+			  	}
+		      });
+ 
+		  }
+		  review_Fn();
+		  
+		  /* 리뷰 길이가 너무 길면 더보기 버튼 보이기  */
+		  // .offsetHeight >90  보여지는 부분이 90px를 넘어가면, 보여지는 높이 조절하기 어려움 clientHeight
+		  // .length >= 100  텍스트 길이가 100보다 크거나 같으면
+		  // .split('\n').length; 줄바꿈이 되었을 때 줄바꿈 안하면 소용이 없음
+		  // word-break: keep-all; 한글일 경우 띄어쓰기 기준으로 줄바꿈 해줌 스타일로 적용
+		  $("#review_box").each(function(){
+		      let re = $("#review_box");
+		      let re_txt = $("#review_box").text();
+		      let re_height = document.getElementById("review_box").clientHeight;
+		     // console.log(re_height);
+		      let re_html = $("#review_box").html();
+		      let re_txt_short = re_txt.substring(0,60)+"...";
+		      
+		      // 더보기 버튼 추가 void(0)는 이동을 하지 않고 그곳에서 만 움직이겠다는 뜻
+		      let btn_more = $('<a href="javascript:void(0)" class="more">더보기</a>');
+		      $("#review_btn").append(btn_more);
+		      
+		      // 텍스트 길이가 길면 자르고 길이가 짧으면 더보기 버튼을 감춘다.
+		      if(re_height >= 75){
+			  	re.html(re_txt_short);
+		                
+		      }else {
+		            btn_more.hide()
+		      }
+		      
+		      btn_more.click(toggle_content);
+		      
+	            function toggle_content(){
+	                if($(this).hasClass('short')){
+	                    // 접기 상태
+	                    $(this).text('더보기');
+	                    re.html(re_txt_short); // 텍스트 자르기
+	                    $(this).removeClass('short');
+	                }else{
+	                    // 더보기 상태
+	                    $(this).text('접기');
+	                    re.html(re_html); // 텍스트 크기 원상복귀
+	                    $(this).addClass('short');
+	 
+	                }
+	          	}
+		  });
+		  
+		  
 		
 	});
 	

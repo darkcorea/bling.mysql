@@ -54,25 +54,7 @@
 			</c:if>
 		</td>
 	</tr>
-</table><br><br>
-프로덕트 주입 실험
-<table border="1" class="table">
-	<thead>
-		<tr>
-			<th style="width:100px;">작성자</th>
-			<th style="width:500px;">내용</th>
-		</tr>
-	</thead>
-	<tbody>
-	<c:forEach items="${review}" var="review"  begin="0" end="5">
-		<tr>
-			<td><c:out value="${review.uname}"/></td>
-			<td><c:out value="${review.contents}"/></td>
-		</tr>
-	</c:forEach>
-	</tbody>
-</table><br>
-
+</table>
 
 </body>
 </html>

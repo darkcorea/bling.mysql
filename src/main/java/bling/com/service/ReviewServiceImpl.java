@@ -16,8 +16,8 @@ public class ReviewServiceImpl implements ReviewService {
 	ReviewDAO reviewDAO;
 
 	@Override
-	public int reviewCount() throws Exception {
-		return reviewDAO.reviewCount();
+	public int reviewCount(int pidx) throws Exception {
+		return reviewDAO.reviewCount(pidx);
 	}
 
 	@Override
@@ -25,6 +25,16 @@ public class ReviewServiceImpl implements ReviewService {
 		return reviewDAO.reviewPaging(pm);
 	}
 	
+	// 상품에 대한 리뷰 갯수 최신순 
+	@Override
+	public List<CombineVO> reviewProduct_1(PageMaker pm) throws Exception {
+		return reviewDAO.reviewProduct_1(pm);
+	}
 	
+	// 상품에 대한 리뷰 갯수 평점순
+	@Override
+	public List<CombineVO> reviewProduct_2(PageMaker pm) throws Exception {
+		return reviewDAO.reviewProduct_2(pm);
+	}
 	
 }

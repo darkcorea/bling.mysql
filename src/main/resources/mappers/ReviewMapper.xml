@@ -6,27 +6,47 @@
 <mapper namespace="bling.com.mapper.reviewMapper">
 
 	<!-- 상품의 pidx에 따라서 리뷰 갯수 가져오기  parameterType="int" -->
-	<select id="reviewCount"  resultType="int">
+	<select id="reviewCount"  parameterType="int" resultType="int">
 		SELECT count(r.ridx) as reviewCount FROM bg_review r
     	JOIN bg_order_detail od on r.detail_idx = od.detail_idx
 	    JOIN bg_option o on o.oidx = od.oidx
 	    Join bg_user u on u.midx = r.midx
-	    WHERE o.pidx = 3
+	    WHERE o.pidx = #{pidx}
 	</select>
 	
 	<!-- 페이징된 리뷰 가져오기 -->
 	<select id="reviewPaging"  parameterType="PageMaker" resultType="CombineVO">
 	<![CDATA[
-	select * from 
-    ( select rownum as rnum, A.* from
-        (SELECT r.contents, r.rdate, r.image1, r.image2, r.grade, u.uname FROM bg_review r
+	SELECT r. ridx, r.contents, r.rdate, r.image1, r.image2, r.grade, u.uname FROM bg_review r
         JOIN bg_order_detail od on r.detail_idx = od.detail_idx
         JOIN bg_option o on o.oidx = od.oidx
         Join bg_user u on u.midx = r.midx
         WHERE o.pidx = 3
-        order by o.pidx desc ) A 
-     where rownum <= #{lastPost} ) B
- 	where rnum >= #{startPost}
+        order by o.pidx desc
+        limit #{startPost}, #{perPageNum}
  	]]>
  	</select>
+ 	
+ 	<!-- 상품의 리뷰들 가져오기  최신순-->
+	<select id="reviewProduct_1" parameterType="PageMaker" resultType="CombineVO">
+		SELECT   r.grade, r.contents, r.image1, r.image2, u.uname FROM bg_review r
+    	JOIN bg_order_detail od on r.detail_idx = od.detail_idx
+	    JOIN bg_option o on o.oidx = od.oidx
+	    Join bg_user u on u.midx = r.midx
+	    WHERE o.pidx = #{pidx}
+	    ORDER BY r.rdate desc
+	    limit #{startPost}, #{perPageNum}
+	</select>
+	
+	
+	<!-- 상품의 리뷰들 가져오기  평점 높은 순-->
+	<select id="reviewProduct_2" parameterType="PageMaker" resultType="CombineVO">
+		SELECT  r.grade, r.contents, r.image1, r.image2, u.uname FROM bg_review r
+    	JOIN bg_order_detail od on r.detail_idx = od.detail_idx
+	    JOIN bg_option o on o.oidx = od.oidx
+	    Join bg_user u on u.midx = r.midx
+	    WHERE o.pidx = #{pidx}
+	    ORDER BY r.rdate desc
+	    limit #{startPost}, #{perPageNum}
+	</select>
 </mapper>

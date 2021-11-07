@@ -1,15 +1,21 @@
 package bling.com.controller;
 
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-
+import bling.com.domain.Criteria;
+import bling.com.domain.PageMaker;
 import bling.com.service.ProductService;
+import bling.com.service.ReviewService;
 
 
 
@@ -20,6 +26,9 @@ public class ProductController {
 	
 	@Autowired
 	ProductService productService;
+	
+	@Autowired
+	ReviewService reviewService;
 	
 	/* 상품 리스트 페이지 */
 	// 상품 리스트에서 신상품,판매순,높은가격순,낮은가격순 을 선택 했을 경우 여기로 이동해서
@@ -154,13 +163,55 @@ public class ProductController {
 		// 상품의 이미지들
 		model.addAttribute("image", productService.image(pidx));
 		
+		// 상품의 리뷰에 대한 평점과 사진들
+		model.addAttribute("reviewGrade", productService.reviewGrade(pidx));
+				
 		// 상품의 리뷰들
-		model.addAttribute("review", productService.reviewProduct_1(pidx));
-		
+		//model.addAttribute("review", productService.reviewProduct_1(pidx));
 		
 		return "/product/detail";
+
+	}
+	
+	// 리뷰 뿌러주기 에이작스
+	@RequestMapping(value="/detail_review.do" )
+	@ResponseBody
+	public  Map<String, Object> detail_review(int pidx) throws Exception  {	
+		
+		//System.out.println("pidx>>>>>>>>>>>>>>>>>"+pidx);
+		// pidx에 대한 리뷰 갯수
+		int reviewCount = reviewService.reviewCount(pidx);
+		// 가져오는 페이지 수 3
+		int pageNum = 3;
+		int page = 1;
+		Criteria sc = new Criteria();
+		sc.setPerPageNum(pageNum);
+		sc.setPage(page);
 		
 		
+		// 페이징 하기 위해서 필요한 값들 넣음
+		PageMaker pm = new PageMaker();
+		pm.setScri(sc);
+		pm.setPidx(pidx);
+		pm.setTotalCount(reviewCount);
+		
+		
+		/*
+		 * System.out.println("리뷰 갯수   >>>>"+reviewCount);
+		 * System.out.println("페이지 번호>>>>"+sc.getPage());
+		 * System.out.println("StartPage>>>>>>>>>>>"+pm.getStartPage());
+		 * System.out.println("EndPage>>>>>>>>>>>>>>"+pm.getEndPage());
+		 * System.out.println("시작하는 페이지 번호>>>>>>>>>>"+pm.getStartPost());
+		 * System.out.println("가져오는 페이지 갯수>>>>>>>>>>"+pm.getPerPageNum());
+		 */
+
+		
+		// 페이징 된 리뷰와 페이징에 필요한 값 넣음
+		Map<String, Object> review_1 = new HashMap<String, Object>();
+		review_1.put("pm", pm);
+		review_1.put("reviewProduct_1", reviewService.reviewProduct_1(pm));
+		
+		return review_1;
 	}
 
 }

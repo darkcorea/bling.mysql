@@ -6,6 +6,7 @@ import bling.com.vo.ImageVO;
 import bling.com.vo.CombineVO;
 import bling.com.vo.OptionVO;
 import bling.com.vo.ProductVO;
+import bling.com.vo.ReviewVO;
 
 public interface ProductService {
 
@@ -26,7 +27,6 @@ public interface ProductService {
 	ProductVO detail(int pidx) throws Exception;
 	List<OptionVO> options(int pidx) throws Exception;
 	ImageVO image(int pidx) throws Exception;
-	List<CombineVO> reviewProduct_1(int pidx) throws Exception;
-	List<CombineVO> reviewProduct_2(int pidx) throws Exception;
+	List<ReviewVO> reviewGrade(int pidx) throws Exception;
 
 }

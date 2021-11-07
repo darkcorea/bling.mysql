@@ -7,7 +7,9 @@ import bling.com.vo.CombineVO;
 
 public interface ReviewService {
 
-	int reviewCount() throws Exception;
+	int reviewCount(int pidx) throws Exception;
+	List<CombineVO> reviewProduct_1(PageMaker pm) throws Exception;
+	List<CombineVO> reviewProduct_2(PageMaker pm) throws Exception;
 	List<CombineVO> reviewPaging(PageMaker pm)throws Exception;
 	
 	
