@@ -808,7 +808,11 @@
 	
 	
 	/*   제이쿼리를 활용해서 리뷰 페이징 뿌려주기 */
+	// 누르면 나오게 하기 위해서 아래로 뺴놨음.
+	// 페이지가 로드 되면 1번 실행 되게 해놨음
 	  function review_Fn(page, type){
+	    
+	    // page는 페이징 번호이고, type는 최신순인지 또는 등급순인지 
 	      let pidx =  <c:out value="${detail.pidx}"/>;
 	      if (page == null){page = 1};
 	      if (type == null){type = "R"};
@@ -822,11 +826,15 @@
 		  	 //console.log(data);
 		  	 //console.log(data.pm.endPage);
 		  	 //console.log(data.reviewProduct_1[0]);
+		  	 
+		  	 // 가져온 데이터를 리뷰 div에 뿌려 준다.
 		  	 let reviews = data.reviewProduct_1;
 		  	 let pm = data.pm;
 		  	 let prev = parseInt(pm.startPage - 1) ;
 		  	 let next = parseInt(pm.endPage + 1) ;
 		  	 let str = "";
+		  	 
+		  	 // 리뷰 나오는 테이블 뿌려 주기
 		  	 str += "<table class='table'>";
 		  	 for (let i=0; i<reviews.length ; i++){
 		  	 	str += "<tr class='review_tr'>";
@@ -854,6 +862,8 @@
 		  	 	str += "</tr>";
 		  	 }
 		  	 str += "</table><br>";
+		  	 
+		  	 // 페이징 할 수 있는 번호 나오는 곳 뿌려 주기
 		  	 str += "<nav aria-label='Page navigation example'>";
 		  	 str += "<ul class='pagination justify-content-center'>";
 		  	 str += "<li class='page-item disabled'>";
@@ -879,7 +889,7 @@
 		  	 
 		  	},
 		  	error:function(){
-		  	    alert("처음 리뷰 뿌려주기 에러입니다.");
+		  	    alert("리뷰 뿌려주기 에러입니다.");
 		  	}
 	      });
 	  }
