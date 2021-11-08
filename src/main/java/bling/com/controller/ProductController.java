@@ -176,14 +176,13 @@ public class ProductController {
 	// 리뷰 뿌러주기 에이작스
 	@RequestMapping(value="/detail_review.do" )
 	@ResponseBody
-	public  Map<String, Object> detail_review(int pidx) throws Exception  {	
+	public  Map<String, Object> detail_review(int pidx, int page, String type) throws Exception  {	
 		
 		//System.out.println("pidx>>>>>>>>>>>>>>>>>"+pidx);
 		// pidx에 대한 리뷰 갯수
 		int reviewCount = reviewService.reviewCount(pidx);
 		// 가져오는 페이지 수 3
 		int pageNum = 3;
-		int page = 1;
 		Criteria sc = new Criteria();
 		sc.setPerPageNum(pageNum);
 		sc.setPage(page);
@@ -207,9 +206,18 @@ public class ProductController {
 
 		
 		// 페이징 된 리뷰와 페이징에 필요한 값 넣음
+		
 		Map<String, Object> review_1 = new HashMap<String, Object>();
 		review_1.put("pm", pm);
+		
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>"+type);
+		
+		if (type.equals("R")) {
 		review_1.put("reviewProduct_1", reviewService.reviewProduct_1(pm));
+		}
+		if (type.equals("G")) {
+		review_1.put("reviewProduct_1", reviewService.reviewProduct_2(pm));	
+		}
 		
 		return review_1;
 	}

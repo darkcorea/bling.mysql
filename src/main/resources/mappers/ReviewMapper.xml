@@ -29,24 +29,24 @@
  	
  	<!-- 상품의 리뷰들 가져오기  최신순-->
 	<select id="reviewProduct_1" parameterType="PageMaker" resultType="CombineVO">
-		SELECT   r.grade, r.contents, r.image1, r.image2, u.uname FROM bg_review r
+		SELECT   r.ridx, r.grade, r.contents, r.image1, r.image2, u.uname FROM bg_review r
     	JOIN bg_order_detail od on r.detail_idx = od.detail_idx
 	    JOIN bg_option o on o.oidx = od.oidx
 	    Join bg_user u on u.midx = r.midx
 	    WHERE o.pidx = #{pidx}
-	    ORDER BY r.rdate desc
+	    ORDER BY r.ridx desc
 	    limit #{startPost}, #{perPageNum}
 	</select>
 	
 	
 	<!-- 상품의 리뷰들 가져오기  평점 높은 순-->
 	<select id="reviewProduct_2" parameterType="PageMaker" resultType="CombineVO">
-		SELECT  r.grade, r.contents, r.image1, r.image2, u.uname FROM bg_review r
+		SELECT  r.ridx, r.grade, r.contents, r.image1, r.image2, u.uname FROM bg_review r
     	JOIN bg_order_detail od on r.detail_idx = od.detail_idx
 	    JOIN bg_option o on o.oidx = od.oidx
 	    Join bg_user u on u.midx = r.midx
 	    WHERE o.pidx = #{pidx}
-	    ORDER BY r.rdate desc
+	    ORDER BY r.grade desc
 	    limit #{startPost}, #{perPageNum}
 	</select>
 </mapper>

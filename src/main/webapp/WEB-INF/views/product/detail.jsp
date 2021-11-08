@@ -244,7 +244,7 @@
 	}
 	
 	/* 후기 개별 이미지들, 리뷰 이미지 2개 */
-	.reiview-image1 {
+	.review-image1 {
 		width:90px;
 		height:90px;
 		float: left;
@@ -254,9 +254,9 @@
 	/* 리뷰 리스트 테이블 */
 	#review_table{
 		width:986;
-		height:440px;
+	/* 	height:440px; */
 		margin: 5px auto;
-		border:1px solid black;
+	/* border:1px solid black; */
 	}
 
 	.review_tr {
@@ -439,67 +439,22 @@
 				<!-- 데이터베이스에서 null값을 아래로 내리는 방법을 찾아내서 매퍼를 수정함 -->
 				<div class="review-images">
 					<c:forEach items="${reviewGrade}" var="re_grade" end="9">
-					<img id="review_iamge" class="reiview-image1 img-thumbnail" src="/resources/review_img/${re_grade.image1}">
+					<img id="review_iamge" class="review-image1 img-thumbnail" src="/resources/review_img/${re_grade.image1}">
 					</c:forEach>
 				</div>
 		</div>
 		<!-- 리뷰, 최신순, 평점순 -->
 		<div>
 			&ensp;&ensp;&ensp;<span class="fw-bold fs-5">리뷰</span>
-			&ensp;<span>최신순</span>
+			&ensp;<span onclick="review_Fn(1,'R')">최신순</span>
 			<span>|</span>
-			<span>평점순</span>
+			<span onclick="review_Fn(1,'G')">평점순</span>
 		</div >			
 		<!--  리뷰 테이블 -->
 		<div id="review_table">
-			<table class="table">
-				<tr class="review_tr">
-					<td style="width:5%"></td>
-					<td style="width:30%">
-					<div  id="review_box" style="word-break: keep-all;">
-					설정상으로는 영웅문 3부작의 어느 신공에도 뒤지지 않을 만큼 신비하고 막강한 위력을 자랑하지만, 정작 실전에서는 별 효험을 보지 못한 신공이기도 하다. 용상반야공 10층을 익힌 금륜법왕이 중원에서 처음 맞닥뜨린 강자는 하필 주백통으로
-					</div>
-					<div id="review_btn"></div>
-					</td>
-					<td style="width:10%"></td>
-					<td style="width:30%">
-						<img class="reiview-image1 img-thumbnail" src="/resources/review_img/ring_main_1.jpg">
-						<img class="reiview-image1 img-thumbnail" src="/resources/review_img/ring_main_1.jpg">
-					</td>
-					<td style="width:10%"></td>
-					<td>유광*</td>
-				</tr>
-				<tr class="review_tr">
-					<td></td>
-					<td>리뷰</td>
-					<td></td>
-					<td>
-						<!-- 
-						<img class="reiview-image1 img-thumbnail" src="/resources/review_img/ring_main_1.jpg">
-						<img class="reiview-image1 img-thumbnail" src="/resources/review_img/ring_main_1.jpg">
-						-->
-					</td>
-					<td></td>
-					<td>유광*</td>
-				</tr>
-				<tr class="review_tr">
-					<td></td>
-					<td>리뷰</td>
-					<td></td>
-					<td>
-						<img class="reiview-image1 img-thumbnail" src="/resources/review_img/ring_main_1.jpg">
-						<img class="reiview-image1 img-thumbnail" src="/resources/review_img/ring_main_1.jpg">
-					</td>
-					<td></td>
-					<td>유광*</td>
-				</tr>
-			</table>
-			<table>
-				<tr>
-					<td>페이징 버튼</td>
-				</tr>
-			</table>
+	
 		</div>
+		
 	</div>
 	
 	<!-- 상품에 관한 문의 -->
@@ -712,26 +667,7 @@
 		  }
 		  review_Grade();
 		  
-		
-		  /* 제이쿼리를 활용해서 리뷰 뿌려주기*/
-		  function review_Fn(){
-		      let pidx =  <c:out value="${detail.pidx}"/>;
-		      $.ajax({
-			  	url:"detail_review.do",
-			    data:{"pidx":pidx},
-			    dataType: 'json',
-			  	type:"post",
-			  	success:function(data){
-			  	 console.log(data);
-			  	 console.log(data.pm.endPage);
-			  	 console.log(data.reviewProduct_1[0]);
-			  	},
-			  	error:function(){
-			  	    alert("처음 리뷰 뿌려주기 에러입니다.");
-			  	}
-		      });
- 
-		  }
+		  // 리뷰 페이징 해주는 function 실행
 		  review_Fn();
 		  
 		  /* 리뷰 길이가 너무 길면 더보기 버튼 보이기  */
@@ -739,17 +675,17 @@
 		  // .length >= 100  텍스트 길이가 100보다 크거나 같으면
 		  // .split('\n').length; 줄바꿈이 되었을 때 줄바꿈 안하면 소용이 없음
 		  // word-break: keep-all; 한글일 경우 띄어쓰기 기준으로 줄바꿈 해줌 스타일로 적용
-		  $("#review_box").each(function(){
-		      let re = $("#review_box");
-		      let re_txt = $("#review_box").text();
-		      let re_height = document.getElementById("review_box").clientHeight;
-		     // console.log(re_height);
-		      let re_html = $("#review_box").html();
+		  $(".review_box").each(function(){
+		      let re = $(".review_box");
+		      let re_txt = $(".review_box").text();
+		      let re_height = document.getElementsByClassName("review_box").clientHeight;
+		      console.log(re_height);
+		      let re_html = $(".review_box").html();
 		      let re_txt_short = re_txt.substring(0,60)+"...";
 		      
 		      // 더보기 버튼 추가 void(0)는 이동을 하지 않고 그곳에서 만 움직이겠다는 뜻
 		      let btn_more = $('<a href="javascript:void(0)" class="more">더보기</a>');
-		      $("#review_btn").append(btn_more);
+		      $(".review_btn").append(btn_more);
 		      
 		      // 텍스트 길이가 길면 자르고 길이가 짧으면 더보기 버튼을 감춘다.
 		      if(re_height >= 75){
@@ -869,6 +805,84 @@
 		//옵션 박스 삭제하기
 		$("#option_box"+oidx).remove();
 	}
+	
+	
+	/*   제이쿼리를 활용해서 리뷰 페이징 뿌려주기 */
+	  function review_Fn(page, type){
+	      let pidx =  <c:out value="${detail.pidx}"/>;
+	      if (page == null){page = 1};
+	      if (type == null){type = "R"};
+	      
+	      $.ajax({
+		  	url:"detail_review.do",
+		    data:{"pidx":pidx, "page":page, "type":type},
+		    dataType: 'json',
+		  	type:"post",
+		  	success:function(data){
+		  	 //console.log(data);
+		  	 //console.log(data.pm.endPage);
+		  	 //console.log(data.reviewProduct_1[0]);
+		  	 let reviews = data.reviewProduct_1;
+		  	 let pm = data.pm;
+		  	 let prev = parseInt(pm.startPage - 1) ;
+		  	 let next = parseInt(pm.endPage + 1) ;
+		  	 let str = "";
+		  	 str += "<table class='table'>";
+		  	 for (let i=0; i<reviews.length ; i++){
+		  	 	str += "<tr class='review_tr'>";
+			  	str += "<td style='width:5%'></td>";
+			  	str += "<td style='width:30%'>";
+			  	str += "<div id='review_box"+reviews[i].ridx+"' style='word-break:keep-all;'>"+reviews[i].contents+"</div>";
+			  	str += "<div id='review_btn"+reviews[i].ridx+"'></div>";
+			  	str += "</td>";
+			  	str += "<td style='width:10%'></td>";
+			  	str += "<td style='width:30%'>"
+			  	if(reviews[i].image1 == null || reviews[i].image1 == ""){
+			  	  str += "";
+			  	}else{
+			  	  str += "<img class='review-image1 img-thumbnail' src='/resources/review_img/"+reviews[i].image1+"'>";   
+			  	}
+			  	if(reviews[i].image2 == null || reviews[i].image2 == ""){
+				  	  str += "";
+				}else{
+				  	  str += "<img class='review-image1 img-thumbnail' src='/resources/review_img/"+reviews[i].image2+"'>";   
+				}
+			  	str += "</td>";
+			  	let name = reviews[i].uname.slice(0,-1);
+			  	let name1 = name+"*";
+			  	str += "<td style='width:10%'>"+name1+"</td>";
+		  	 	str += "</tr>";
+		  	 }
+		  	 str += "</table><br>";
+		  	 str += "<nav aria-label='Page navigation example'>";
+		  	 str += "<ul class='pagination justify-content-center'>";
+		  	 str += "<li class='page-item disabled'>";
+		  	 if (pm.prev == true){
+		  	     str += "<a class='page-link' onclick='review_Fn("+prev+",\""+type+"\")'>이전</a>";
+		  	 }
+		  	 str += "</li>";
+		  	 let startPage = parseInt(pm.startPage);
+		  	 let endPage = parseInt(pm.endPage);
+		  	 for (let k = startPage; k<=endPage; k++ ){
+		  	 	str += "<li class='page-itme'><a class='page-link' onclick='review_Fn("+k+",\""+type+"\")'>"+k+"</a>&ensp;";      
+		  	 }
+		  	 str += "<li class='page-item'>";
+		  	 if(pm.next && pm.endPage > 0){
+		  	     str += "<a class='page-link' onclick='review_Fn("+next+",\""+type+"\")'>다음</a>";
+		  	 }
+		  	 str += "</li>";
+		  	 str += "</ul>";
+		  	 str += "</nav>";
+		  	 
+		  	 $("#review_table").html(str);
+		  	 
+		  	 
+		  	},
+		  	error:function(){
+		  	    alert("처음 리뷰 뿌려주기 에러입니다.");
+		  	}
+	      });
+	  }
 	
 	
 	// 하트버튼 누르면 관심상품에 넣고 다시 누르면 빼고
