@@ -24,9 +24,9 @@
 		<beans:property name="suffix" value=".jsp" /><!--확장자-->
 	</beans:bean>
 	
-	<context:component-scan base-package="bling.com.controller" />
-	<context:component-scan base-package="bling.com.service" />
-	<context:component-scan base-package="bling.com.dao" />
+	<context:component-scan base-package="com.project.bling.controller" />
+	<context:component-scan base-package="com.project.bling.service" />
+	<context:component-scan base-package="com.project.bling.dao" />
 	
 	<context:annotation-config />
 	<!-- 스프링 프레임워크가 쓰는 시스템의 정보를 쓴다-->
