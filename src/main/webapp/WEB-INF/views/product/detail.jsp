@@ -1,492 +1,320 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> 
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content ="IE=edge">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>상품 상세페이지</title>
 <script src="/js/jquery-3.6.0.min.js"></script>
 <script src="/js/bootstrap.bundle.js"></script>
 <link rel="stylesheet" href="/css/bootstrap.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-<style>
-   /* 메인 페이지 설정   */
-	section {
-		width:1008px;
-		/* height:20000px; */
-		/* border:1px solid black; */
-		margin:5px auto;
-	}
-	
-	/* 폰트사이즈  */
-	.font12 {
-		font-size:12px;
-	}
-	
-	/* 아이콘 크기 등 설정 */
-	.size27 {
-		height:27px;
-		width:27px;
-	}
-	
-	.size25 {
-		height:25px;
-		width:25px;
-	}
-	
-	
-	/* 상품 이미지, 옵션 , 가격, 결제, 장바구니 */
-	.explan {
-		height:680px;
-	}
-	
-	/* 보여지는 이미지 틀*/
-	.explan .image1 {
-		width:490px;
-		height:630px;
-		margin:20px 6px;
-		float: left;
-	}
-	
-	/* 커다란 이미지 */
-	.explan .image1 .image2 {
-		width:490px;
-		height:490px;
-		margin-bottom: 15px ;
-	}
-	
-	/* 작은 이미지들 1~4 */
-	.explan .image1 .image3 {
-		width:100px;
-		height:100px;
-		float: left;
-		margin: 5px;
-	}
-	
-	/* 이미지 옆에 이름, 옵션, 가격, 결제, 장바구니 버튼등의 큰들*/
-	.explan .text1 {
-		width:490px;
-		height:630px;
-		margin:20px 3px;
-		float: left;	
-	}
-	
-	/* 이름, 옵션 나오는 곳*/
-	.explan .text1 .text2 {
-		width:468px;
-		height:480px;
-		float: right;
-	
-	}
-	
-	/* 상품명 위에 있는 커다란 선 */
-	.explan .myhr {
-		background-color: black;
- 		height: 3px;
- 		margin:0px 0px 10px 0px;
-	}
-	
-	/* 가격, 옵션 텍스트 */
-	.select .select-text, .explan .text2 .price1{
-		float: left;
-	}
-	
-	/* 옵션 드롭 셀릭트 박스  */
-	.select .form-select {
-		width:70%;
-	}
-	
-	/* 옵션을 선택하면 표시되는 곳 */
-	.explan .text1 .text2 .select-result{
-		width:100%;
-		height:270px;
-		overflow:auto;
-	}
-	
-	/* 옵션에 선택시 나오는 박스 크기 */	
-	.option_box{
-		width:100%;
-		height:45px;
-		padding-top:3px;
-		border-bottom:1px solid #BEB5B5;
-	}
-	
-	/* 옵션 선택 박스 안에 있는 테이블 크기*/
-	.option_tb1 {
-		width:220px;
-	}
-	
-	/* 옵션의 숫자를 조절 하는 단추 컨트롤러 */
-	.option_tb2 {
-		width:100px;
-		text-align:light;
-	}
-	
-	/* 선택한 옵션들에 대한 종합 가격 */
-	.explan .text1 .text2 .select-price{
-		text-align:right;
-		height:30px;
-		margin: 5px 70px 10px 0px;
-		
-	}
-
-	/* 버튼들 위치 가운데 */
-	.explan .text2 .btn-two {
-		text-align:center;
-	}
-	
-	/* 바로구매 버튼 */
-	.explan .text2 .btn-two .btn-danger {
-		background-color: #CB7878;
-		border: 1px solid #CB7878;
-		width: 160px;
-	}
-	
-	
-	/* 장바구니 버튼 */
-	.explan .text2 .btn-two .btn-light {
-		width: 160px;
-	}
-	
-	/* 하트 아이콘  */
-	.bi-suit-heart,  .bi-suit-heart-fill {
-		font-size:25px;
-		color:red;
-	}
-	
-	/* explan밑에 있는 hr줄의 마진  */
-	.explan-bottom {
-		margin-bottom: 50px;
-	}
-
-	/* 상세정보 후기 상품문의 구매가이드  바*/
-	.detail-nav {
-		text-align:center;
-		font-size:20px;
-		margin: 20px auto;
-		padding: 20px;
-		border-bottom:1px solid #BEB5B5;
-	}
-	
-	/* 상세정보, 후기, 상품문의, 구매가이드  */
-	.detail-nav-1{
-		margin:20px;
-	}
-    
-    /* 예비 클래스 3개 */
-    .detail-nav-2, .detail-nav-3, .detail-nav-4{
-
-	}
-    
-    /* 상세정보, 후기, 상품문의, 구매가이드 각각 아래 발간색 줄 */
-    #move_info, #move_review, #move_question, #move_giude {
-   		border: #CB7878 solid;
-    	border-width: 0 0 10px 0;
-    }
-    
-	/* 상세정보 이미지 가운데로 */
-	.detail-image, .detail-guide {
-		text-align:center;	
-	}
-	
-	/* 평점 평균, 개별 평점, 사진10개 */
-	.detail-review-view {
-		width:990px;
-		height:250px;
-		margin: 5px auto;
-	/*	border:1px solid black; */	
-		padding:20px;
-	}
-	
-	/* 평점 평균 나오는곳 과 전체리뷰 수*/
-	.detail-review-view .review-average{
-		width:125px;
-		height:125px;
-		float: left;
-		text-align:center;
-		margin:50px 50px;
-	}
-	
-	/* 평점평균 나오는 곳 */
-	.detail-review-view .review-average .review-average1{
-		width:125px;
-		height:100px;
-		background-color:black;
-		color:white;
-		font-size:65px;
-	}
-		
-	/* 개별 평점 */
-	.detail-review-view .review-score{
-		float: left;
-		width:200px;
-		height:150px;
-		margin-top:37px;	
-	}
-	
-	/* 평점 안에 들어가 있는 prograce 바 */
-	.review-score .file{
-		height:16px;
-		vertical-align:middle;
-	}
-	
-	/* 이미지 10개 틀 */
-	.detail-review-view .review-images{
-		width:500px;
-		height:200px;
-		float: right;
-		margin:0px;
-	}
-	
-	/* 후기 개별 이미지들, 리뷰 이미지 2개 */
-	.review-image1 {
-		width:90px;
-		height:90px;
-		float: left;
-		margin: 3px;
-	}
-	
-	/* 리뷰 리스트 테이블 */
-	#review_table{
-		width:986;
-	/* 	height:440px; */
-		margin: 5px auto;
-	/* border:1px solid black; */
-	}
-
-	.review_tr {
-		height:120px;
-	}
-</style>
-
-
+<link rel="stylesheet"	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="/css/pro_detail.css">
 </head>
 <body>
-상품상세 페이지입니다<br>
-<!-- 상세페이지 main -->
-상품 가격 : <c:out value="${detail.saleprice}"/> <br>
-리뷰 갯수 : <c:out value="${fn:length(reviewGrade)}"/> <br>
-<header>
-	<%@ include file="/WEB-INF/views/header.jsp" %><BR><br>
-</header>
 
-<section>
-	<!-- 상세이미지 보여주는  -->
-	<div class="w-100 explan"> 
-		<div class="image1">
-			<img src="/resources/image/${image.main}" class="img-thumbnail image2" id="image-main">
-			<img src="/resources/image/${image.main}" class="img-thumbnail image3" id="main">
- 			<c:if test="${image.detail1 ne null}">
-			<img src="/resources/image/${image.detail1}" class="img-thumbnail image3" id="detail1">
-			</c:if>
-			<c:if test="${image.detail2 ne null}">
-			<img src="/resources/image/${image.detail2}" class="img-thumbnail image3" id="detail2">
-			</c:if>
-			<c:if test="${image.detail3 ne null}">
-			<img src="/resources/image/${image.detail3}" class="img-thumbnail image3" id="detail3">
-			</c:if>
-		</div>
-		
-		<!-- 상품가격과 옵션, 버튼 표시 -->
-		<div class="text1">
-			<div class="text2">
-				<hr class="myhr">
-				<span class="fw-bold fs-3 m-1"><c:out value="${detail.pname}"/></span><br>
-				<hr>
-				
-				<!--  가격 표시 -->
-				<div class="price">
-					<div class="fw-bold fs-6 w-25 price1 m-1">가격</div>
-					<div class="price2">
-						<span class="fw-bold fs-5">
-							<fmt:formatNumber type="number" maxFractionDigits="3" value="${detail.saleprice}"/>원
-						</span>&ensp;
-						<span class="text-muted text-decoration-line-through">
-							<fmt:formatNumber type="number" maxFractionDigits="3" value="${detail.price}"/>원
-						</span>&ensp;				
-						<span class="text-danger"><c:out value="${detail.discount}"/>%</span>
-					</div>				
-				</div>
-				<hr>
-				
-				<!-- 옵션 선택 select 박스 -->
-				<div class="select">
-					<div class="select-text fw-bold w-25 m-1">옵션</div>
-					<div>
-						<select class="form-select" aria-label="Default select example">
-							<option value="first" selected disabled>[필수] 옵션을 선택하세요.</option>
-							
-							<!-- 재고가  1~9개라면 재고 표시 -->
-							<c:forEach items="${options}" var="options">
-								<option value="${options.oidx},${options.stock}">
-									<c:out value="${options.oname}"/>
-									<c:if test="${0 < options.stock and options.stock < 10}">
-									<span class="font12">(재고:${options.stock})</span>
-									</c:if>
-								</option>
-								
-								<!-- 재고가 0개라면 disabled 하고 품절 추가 -->
-								<c:if test="${options.stock == 0 }">
-									<script  type="text/javascript">
+	<header>
+		<%@ include file="/WEB-INF/views/header.jsp"%><BR>
+		<br>
+	</header>
+
+	<section>
+		<!-- 상세이미지 보여주는  -->
+		<div class="w-100 explan">
+			<div class="image1">
+				<img src="/resources/image/${image.main}"
+					class="img-thumbnail image2" id="image-main"> <img
+					src="/resources/image/${image.main}" class="img-thumbnail image3"
+					id="main">
+				<c:if test="${image.detail1 ne null}">
+					<img src="/resources/image/${image.detail1}"
+						class="img-thumbnail image3" id="detail1">
+				</c:if>
+				<c:if test="${image.detail2 ne null}">
+					<img src="/resources/image/${image.detail2}"
+						class="img-thumbnail image3" id="detail2">
+				</c:if>
+				<c:if test="${image.detail3 ne null}">
+					<img src="/resources/image/${image.detail3}"
+						class="img-thumbnail image3" id="detail3">
+				</c:if>
+			</div>
+
+			<!-- 상품가격과 옵션, 버튼 표시 -->
+			<div class="text1">
+				<div class="text2">
+					<hr class="myhr">
+					<span class="fw-bold fs-3 m-1"><c:out
+							value="${detail.pname}" /></span><br>
+					<hr>
+
+					<!--  가격 표시 -->
+					<div class="price">
+						<div class="fw-bold fs-6 w-25 price1 m-1">가격</div>
+						<div class="price2">
+						<c:if test="${detail.discount != 0}">
+							<span class="fw-bold fs-5">
+								<fmt:formatNumber type="number" maxFractionDigits="3" value="${detail.saleprice}" />원
+							</span>&ensp;
+							<span class="text-muted text-decoration-line-through">
+								<fmt:formatNumber type="number" maxFractionDigits="3" value="${detail.price}" />원
+							</span>&ensp;
+							<span class="text-danger">
+								<c:out	value="${detail.discount}" />%
+							</span>
+						</c:if>
+						<c:if  test="${detail.discount == 0}">
+							<span class="fw-bold fs-5">
+								<fmt:formatNumber type="number" maxFractionDigits="3" value="${detail.saleprice}" />원
+							</span>
+						</c:if>
+						</div>
+					</div>
+					<hr>
+
+					<!-- 옵션 선택 select 박스 -->
+					<div class="select">
+						<div class="select-text fw-bold w-25 m-1">옵션</div>
+						<div>
+							<select class="form-select" aria-label="Default select example">
+								<option value="first" selected disabled>[필수] 옵션을 선택하세요.</option>
+
+								<!-- 재고가  1~9개라면 재고 표시 -->
+								<c:forEach items="${options}" var="options">
+									<option value="${options.oidx},${options.stock}">
+										<c:out value="${options.oname}" />
+										<c:if test="${0 < options.stock and options.stock < 10}">
+											<span class="font12">(재고:${options.stock})</span>
+										</c:if>
+									</option>
+
+									<!-- 재고가 0개라면 disabled 하고 품절 추가 -->
+									<c:if test="${options.stock == 0 }">
+										<script type="text/javascript">
 									var oidx = '<c:out value="${options.oidx}"/>';
 									var name = '<c:out value="${options.oname}"/>';
 									//alert(oidx);
 									$("select option[value='"+oidx+",0']").attr("disabled","disabled");
 									$("select option[value='"+oidx+",0']").text(name+" 품절");
 									</script>
-								</c:if>
-							
-					   		</c:forEach>
-						</select>
-					</div>
-				</div>
-				
-				<hr>
-				<!-- 옵션 선택 표시 -->
-				<div id="select-result" class="select-result">
+									</c:if>
 
+								</c:forEach>
+							</select>
+						</div>
+					</div>
+
+					<hr>
+					<!-- 옵션 선택 표시 -->
+					<div id="select-result" class="select-result"></div>
+
+					<!-- 선택한 물품 가격 합계 표시 -->
+					<div class="select-price">
+						<span class="font12 fw-bold">TOTAL: </span> <span
+							class="fw-bold fs-4" id="total_price_out">0</span> <input
+							type="hidden" id="total_price_in" value="0"> <span>원</span>
+						<!-- 일단 지금은 안함 -->
+						<!--	<span class="font12"> (선택갯수)</span>    -->
+					</div>
+
+					<!-- 바로구매, 장바구니 버튼 -->
+					<c:choose>
+						<c:when test="${sessionScope.UserVO.id == null}">
+							<div class="btn-two">
+								<button type="button" class="btn btn-danger" onclick="nonorder()">비회원 바로구매</button>
+								<button type="button" class="btn btn-light">장바구니</button>
+								&ensp;<i class="bi bi-suit-heart" id="heart" onclick="heart(${detail.pidx})"></i>	
+							</div>
+						</c:when>
+						<c:otherwise>
+							<div class="btn-two">
+								<button type="button" class="btn btn-danger" onclick="memberorder()">바로구매</button>
+								<button type="button" class="btn btn-light" onclick="cart()">장바구니</button>
+								&ensp;<i class="bi bi-suit-heart" id="heart" onclick="heart(${detail.pidx})"></i>	
+							</div>
+						</c:otherwise>
+					</c:choose>	
 				</div>
-				
-				<!-- 선택한 물품 가격 합계 표시 -->
-				<div class="select-price">
-					<span class="font12 fw-bold">TOTAL: </span>
-					<span class="fw-bold fs-4" id="total_price_out">0</span>
-					<input type="hidden" id="total_price_in" value="0">
-					<span>원</span>
-			<!-- 일단 지금은 안함 -->
-			<!--	<span class="font12"> (선택갯수)</span>    -->
-				</div>
-				
-				<!-- 바로구매, 장바구니 버튼 -->
-				<div class="btn-two">
-					<button type="button" class="btn btn-danger">바로구매</button> 
-					<button type="button" class="btn btn-light">장바구니</button>
-					&ensp;<i class="bi bi-suit-heart" id="heart" onclick="heart(${detail.pidx})"></i>	
-				</div>			
 			</div>
 		</div>
-	</div>
-	
-	<div>
-		<hr class="explan-bottom">
-	</div>
-	
-	<!-- 상품설명, 후기 등 네비게이션 -->
-	<div class="detail-nav fw-bold">
-		<span class="detail-nav-1"><a id="move_info">상세정보</a></span>
-		<span class="detail-nav-1"><a href="#move_review">후기(<span><c:out value="${fn:length(reviewGrade)}"/></span>)</a></span>
-		<span class="detail-nav-1"><a href="#move_question">상문문의</a></span>
-		<span class="detail-nav-1"><a href="#move_giude">구매가이드</a></span>
-	</div>
-	<!-- 상품 상세 설명 이미지 -->
-	<div class="detail-image">
-		<img src="/resources/simage/<c:out value="${image.showing1}"/>">
-		<c:if test="${image.showing2 ne null}">
-		<img src="/resources/simage/<c:out value="${image.showing2}"/>">
-		</c:if>
-		<c:if test="${image.showing3 ne null}">
-		<img src="/resources/simage/<c:out value="${image.showing3}"/>">
-		</c:if>
-		<c:if test="${image.showing4 ne null}">
-		<img src="/resources/simage/<c:out value="${image.showing4}"/>">
-		</c:if>
-		<c:if test="${image.showing5 ne null}">
-		<img src="/resources/simage/<c:out value="${image.showing5}"/>">
-		</c:if>
-	</div>
-	
-	<!-- 상품에 관한 리뷰 -->
-	<div class="detail-nav fw-bold">
-		<span class="detail-nav-1"><a href="#move_info">상세정보</a></span>
-		<span class="detail-nav-1"><a id="move_review">후기(<span><c:out value="${fn:length(reviewGrade)}"/></span>)</a></span>
-		<span class="detail-nav-1"><a href="#move_question">상문문의</a></span>
-		<span class="detail-nav-1"><a href="#move_giude">구매가이드</a></span>
-	</div>
-	
-	<!-- 상품문의 상단 정보들 표시 -->
-	<div class="detail-reviwe" >
-		<!-- 리뷰평점, 별점, 사진 10개 -->
-		<div class="detail-review-view">
+		
+		<div>
+			<hr class="explan-bottom">
+		</div>
+
+		<!-- 상품설명, 후기 등 네비게이션 -->
+		<div class="detail-nav fw-bold">
+			<span class="detail-nav-1"><a id="move_info">상세정보</a></span> <span
+				class="detail-nav-1"><a href="#move_review"
+				style="text-decoration: none; color: inherit;">후기(<span><c:out
+							value="${fn:length(review)}" /></span>)
+			</a></span> <span class="detail-nav-1"><a href="#move_question"
+				style="text-decoration: none; color: inherit;">상품문의</a></span> <span
+				class="detail-nav-1"><a href="#move_giude"
+				style="text-decoration: none; color: inherit;">구매가이드</a></span>
+		</div>
+		<!-- 상품 상세 설명 이미지 -->
+		<div class="detail-image">
+			<img src="/resources/simage/<c:out value="${image.showing1}"/>">
+			<c:if test="${image.showing2 ne null}">
+				<img src="/resources/simage/<c:out value="${image.showing2}"/>">
+			</c:if>
+			<c:if test="${image.showing3 ne null}">
+				<img src="/resources/simage/<c:out value="${image.showing3}"/>">
+			</c:if>
+			<c:if test="${image.showing4 ne null}">
+				<img src="/resources/simage/<c:out value="${image.showing4}"/>">
+			</c:if>
+			<c:if test="${image.showing5 ne null}">
+				<img src="/resources/simage/<c:out value="${image.showing5}"/>">
+			</c:if>
+		</div>
+
+		<!-- 상품에 관한 리뷰 -->
+		<div class="detail-nav fw-bold">
+			<span class="detail-nav-1"><a href="#move_info"
+				style="text-decoration: none; color: inherit;">상세정보</a></span> <span
+				class="detail-nav-1"><a id="move_review">후기(<span><c:out
+							value="${fn:length(review)}" /></span>)
+			</a></span> <span class="detail-nav-1"><a href="#move_question"
+				style="text-decoration: none; color: inherit;">상품문의</a></span> <span
+				class="detail-nav-1"><a href="#move_giude"
+				style="text-decoration: none; color: inherit;">구매가이드</a></span>
+		</div>
+
+		<!-- 상품문의 상단 정보들 표시 -->
+		<div class="detail-reviwe">
+			<!-- 리뷰평점, 별점, 사진 10개 -->
+			<div class="detail-review-view">
 				<!-- 리뷰 평점 -->
 				<div class="review-average">
 					<div class="review-average1">
 						<span id="review-average1">0</span>
 					</div>
-					<span class="font12"><c:out value="${fn:length(reviewGrade)}"/></span><span class="font12">개의 리뷰 펑점</span>
+					<span class="font12"><c:out value="${fn:length(review)}" /></span><span
+						class="font12">개의 리뷰 펑점</span>
 				</div>
-				
 				<!-- 리뷰 별점 텍스트 -->
 				<div class="review-score">
-				<progress id="recount5" class="file" max="100" value="0"> 50% </progress>
-				(<span class="review_sum5 font12">0</span>)<br>
-				<progress id="recount4" class="file" max="100" value="0"> 50% </progress>
-				(<span class="review_sum4 font12">0</span>)<br>
-				<progress id="recount3" class="file" max="100" value="0"> 50% </progress>
-				(<span class="review_sum3 font12">0</span>)<br>
-				<progress id="recount2" class="file" max="100" value="0"> 50% </progress>
-				(<span class="review_sum2 font12">0</span>)<br>
-				<progress id="recount1" class="file" max="100" value="0"> 50% </progress>
-				(<span class="review_sum1 font12">0</span>)
+					<progress id="recount5" class="file" max="100" value="0">
+						50% </progress>
+					(<span class="review_sum5 font12">0</span>)<br>
+					<progress id="recount4" class="file" max="100" value="0">
+						50% </progress>
+					(<span class="review_sum4 font12">0</span>)<br>
+					<progress id="recount3" class="file" max="100" value="0">
+						50% </progress>
+					(<span class="review_sum3 font12">0</span>)<br>
+					<progress id="recount2" class="file" max="100" value="0">
+						50% </progress>
+					(<span class="review_sum2 font12">0</span>)<br>
+					<progress id="recount1" class="file" max="100" value="0">
+						50% </progress>
+					(<span class="review_sum1 font12">0</span>)
 				</div>
-				
+
 				<!-- 사진 10개 -->
 				<!-- 사진이 없을 경우에 뿌려주는 방법을 찾다가. jstl로는 불가능한 걸 알고 스크립트로 뿌려 줄려다가 -->
 				<!-- 데이터베이스에서 null값을 아래로 내리는 방법을 찾아내서 매퍼를 수정함 -->
-				<div class="review-images">
-					<c:forEach items="${reviewGrade}" var="re_grade" end="9">
-					<img id="review_iamge" class="review-image1 img-thumbnail" src="/resources/review_img/${re_grade.image1}">
+				<div class="review-image">
+					<c:forEach items="${review}" var="review" end="9">
+						<img class="review-image1 img-thumbnail"
+							src="/resources/review_img/${review.image1}">
 					</c:forEach>
 				</div>
+			</div>
+			<!-- 리뷰, 최신순, 평점순 -->
+			<div>
+				&ensp;&ensp;&ensp;<span class="fw-bold fs-5">리뷰</span> &ensp;<span
+					class="pointer" onclick="review_Fn(1,'R')">최신순</span> <span>|</span>
+				<span class="pointer" onclick="review_Fn(1,'G')">평점순</span>
+			</div>
+			<!--  리뷰 테이블 -->
+			<div id="review_table"></div>
 		</div>
-		<!-- 리뷰, 최신순, 평점순 -->
-		<div>
-			&ensp;&ensp;&ensp;<span class="fw-bold fs-5">리뷰</span>
-			&ensp;<span onclick="review_Fn(1,'R')">최신순</span>
-			<span>|</span>
-			<span onclick="review_Fn(1,'G')">평점순</span>
-		</div >			
-		<!--  리뷰 테이블 -->
-		<div id="review_table">
-	
-		</div>
-		
-	</div>
-	
-	<!-- 상품에 관한 문의 -->
-	<div class="detail-nav fw-bold">
-		<span class="detail-nav-1"><a href="#move_info">상세정보</a></span>
-		<span class="detail-nav-1"><a href="#move_info">후기(<span><c:out value="${fn:length(reviewGrade)}"/></span>)</a></span>
-		<span class="detail-nav-1"><a id="move_question">상문문의</a></span>
-		<span class="detail-nav-1"><a href="#move_giude">구매가이드</a></span>
-	</div>
-	<div id="detail-Inquiry">
-		상품문의 게시찬 불러오기, 페이징, 상품문의하기 버튼 추가
-	</div>
-	
-	<!-- 상품구매에 대한 가이드 -->
-	<div class="detail-nav fw-bold">
-		<span class="detail-nav-1"><a href="#move_info">상세정보</a></span>
-		<span class="detail-nav-1"><a href="#move_info">후기(<span><c:out value="${fn:length(reviewGrade)}"/></span>)</a></span>
-		<span class="detail-nav-1"><a href="#move_question">상품문의</a></span>
-		<span class="detail-nav-1"><a id="move_giude">구매가이드</a></span>
-	</div>
-	<div class="detail-guide">
-		<img src="/resources/simage/제품구매가이드.jpg">
-	</div>
-	
-</section>
 
-<footer>
-	<%@ include file="/WEB-INF/views/footer.jsp" %>
-</footer> 
+		<!-- 상품에 관한 문의 -->
+		<div class="detail-nav fw-bold">
+			<span class="detail-nav-1"><a href="#move_info"
+				style="text-decoration: none; color: inherit;">상세정보</a></span> <span
+				class="detail-nav-1"><a href="#move_review"
+				style="text-decoration: none; color: inherit;">후기(<span><c:out
+							value="${fn:length(review)}" /></span>)
+			</a></span> <span class="detail-nav-1"><a id="move_question">상품문의</a></span> <span
+				class="detail-nav-1"><a href="#move_giude"
+				style="text-decoration: none; color: inherit;">구매가이드</a></span>
+		</div>
+		<div id="detail-Inquiry">
+
+		</div>
+
+		<!-- 상품구매에 대한 가이드 -->
+		<div class="detail-nav fw-bold">
+			<span class="detail-nav-1"><a href="#move_info"
+				style="text-decoration: none; color: inherit;">상세정보</a></span> <span
+				class="detail-nav-1"><a href="#move_review"
+				style="text-decoration: none; color: inherit;">후기(<span><c:out
+							value="${fn:length(review)}" /></span>)
+			</a></span> <span class="detail-nav-1"><a href="#move_question"
+				style="text-decoration: none; color: inherit;">상품문의</a></span> <span
+				class="detail-nav-1"><a id="move_giude">구매가이드</a></span>
+		</div>
+		<div class="detail-guide">
+			<img src="/resources/simage/제품구매가이드.jpg">
+		</div>
+		<div id="form2"></div>
+	</section>
+
+	<footer>
+		<%@ include file="/WEB-INF/views/footer.jsp"%>
+	</footer>
+	
+	
+<!-- 문의하기 제목을 누르면 나오는 비밀번호 입력 모달창 -->
+<div class="modal fade" id="question_motal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bling_color">
+        <h5 class="modal-title">비밀번호를 입력하세요</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="question_pwd">
+        <span id="pwd_chcek"></span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+        <button type="button" class="btn btn-secondary" id="modal_button">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 문의하기에서 비밀번호를 입력하면 내용이 나오는 모달창 -->
+<div class="modal fade" id="question_motal1" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bling_color">
+        <h5 class="modal-title">문의 내용</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="question_contents">
+      </div>
+      <div class="modal-footer" id="modal_requestion">
+        <button type="button" class="btn btn-secondary" id="modal_button1">수정하기</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="modal_button2">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 <script type="text/javascript">
-
+	
 	/* DOM Tree 생성 완료 후*/
 	$(function(){
 		
@@ -526,7 +354,6 @@
 		    let oidx = opvalue.split(",")[0];
 		    let stock = opvalue.split(",")[1];
 		    
-		    
 			// 아이디가 존재하지 않으면  0을 리턴, 있다면 1부터, 선택한 옵션이 있다면 추가가 안됨
 			let select_oidx = $("#"+"add_option"+oidx).length;
 			
@@ -562,10 +389,10 @@
 			    str += "<td class='font12 option_tb1'>" +opName+ "</td>";
 			    str += "<td class='option_tb2'>";
 			    str += "<input type='button' class='btn btn-light p-0 size27 align-middle' onclick='count(\"minus\"," +oidx+ "," +produt_price+ "," +stock+ ")' value='-'/>";
-				str += "<span id='add_option" +oidx+ "'> 1 </span>"
+				str += "<span id='add_option"+oidx+"'> 1 </span>"
 				str += "<input type='button' class='btn btn-light p-0 size27 align-middle' onclick='count(\"plus\"," +oidx+ "," +produt_price+ "," +stock+ ")' value='+'/>";
 				str += "<td class='option_tb3'><span class='fw-bold' id='change_price" +oidx+ "'>" +addprice+ "</span><span> 원 </span>"
-				str += "<input id='option_delete" +oidx+ "' onclick='option_delete(" +oidx+ "," +produt_price+ ")' type='button' class='btn btn-light p-0 size25 align-middle' value='X'/></td>";
+				str += "<input id='option_delete"+oidx+"' onclick='option_delete(" +oidx+ "," +produt_price+ ")' type='button' class='btn btn-light p-0 size25 align-middle' value='X'/></td>";
 			    str += "<input type='hidden' id ='price_value" +oidx+ "' value='" +price2+ "'>";
 			    str += "<input type='hidden' id ='price_option" +oidx+ "' value='" +produt_price+ "'>";				
 			    str += "</tr>";
@@ -582,8 +409,8 @@
 		
 		
 		 /* 리뷰 평균과 각 리뷰 갯수 뿌려주기 */
-		  function review_Grade(){
-		   	<c:if test="${fn:length(reviewGrade) != 0}">
+		function review(){
+		   	<c:if test="${fn:length(review) != 0}">
 		    <c:set var="sum" value="0" />
 			<c:set var="sum5" value="0" />
 			<c:set var="sum4" value="0" />
@@ -592,7 +419,7 @@
 			<c:set var="sum1" value="0" />
 			
 			 // 리뷰 평점별 합계 구하기
-		    <c:forEach items="${reviewGrade}" var="review">
+		    <c:forEach items="${review}" var="review">
 		    <c:set var="sum" value="${review.grade + sum}"/>
 		    
 		    <c:if test="${review.grade == 5}">
@@ -626,7 +453,7 @@
 		    //console.log(sum);
 		    
 		    // 리뷰 평점 소수점 2자리에서 반올림 하기
-		    let length = <c:out value="${fn:length(reviewGrade)}"/>;
+		    let length = <c:out value="${fn:length(review)}"/>;
 		    let average = (sum / length).toFixed(1) ;
 		    //console.log(average);
 		    
@@ -640,7 +467,7 @@
 		    // 리뷰 점수별 퍼센트 구하기, 소수점 1자리에서 반올림 하기
 		    let percent5 = Math.round((average5/length)*100);
 		    let percent4 = Math.round((average4/length)*100);
-				    let percent3 = Math.round((average3/length)*100);
+		    let percent3 = Math.round((average3/length)*100);
 		    let percent2 = Math.round((average2/length)*100);
 		    let percent1 = Math.round((average1/length)*100);
 	/* 	    console.log(percent5);
@@ -665,55 +492,13 @@
 		    $("#recount1").val(percent1);
 		    </c:if>
 		  }
-		  review_Grade();
+		  review();
 		  
-		  // 리뷰 페이징 해주는 function 실행
-		  review_Fn();
-		  
-		  /* 리뷰 길이가 너무 길면 더보기 버튼 보이기  */
-		  // .offsetHeight >90  보여지는 부분이 90px를 넘어가면, 보여지는 높이 조절하기 어려움 clientHeight
-		  // .length >= 100  텍스트 길이가 100보다 크거나 같으면
-		  // .split('\n').length; 줄바꿈이 되었을 때 줄바꿈 안하면 소용이 없음
-		  // word-break: keep-all; 한글일 경우 띄어쓰기 기준으로 줄바꿈 해줌 스타일로 적용
-		  $(".review_box").each(function(){
-		      let re = $(".review_box");
-		      let re_txt = $(".review_box").text();
-		      let re_height = document.getElementsByClassName("review_box").clientHeight;
-		      console.log(re_height);
-		      let re_html = $(".review_box").html();
-		      let re_txt_short = re_txt.substring(0,60)+"...";
-		      
-		      // 더보기 버튼 추가 void(0)는 이동을 하지 않고 그곳에서 만 움직이겠다는 뜻
-		      let btn_more = $('<a href="javascript:void(0)" class="more">더보기</a>');
-		      $(".review_btn").append(btn_more);
-		      
-		      // 텍스트 길이가 길면 자르고 길이가 짧으면 더보기 버튼을 감춘다.
-		      if(re_height >= 75){
-			  	re.html(re_txt_short);
-		                
-		      }else {
-		            btn_more.hide()
-		      }
-		      
-		      btn_more.click(toggle_content);
-		      
-	            function toggle_content(){
-	                if($(this).hasClass('short')){
-	                    // 접기 상태
-	                    $(this).text('더보기');
-	                    re.html(re_txt_short); // 텍스트 자르기
-	                    $(this).removeClass('short');
-	                }else{
-	                    // 더보기 상태
-	                    $(this).text('접기');
-	                    re.html(re_html); // 텍스트 크기 원상복귀
-	                    $(this).addClass('short');
-	 
-	                }
-	          	}
-		  });
-		  
-		  
+		// 리뷰 페이징 해주는 function 실행	 
+		review_Fn(1,"R");
+  		
+		// 문의 페이징 해주는 function 실행
+		question_Fn(1);
 		
 	});
 	
@@ -807,12 +592,13 @@
 	}
 	
 	
+	
 	/*   제이쿼리를 활용해서 리뷰 페이징 뿌려주기 */
 	// 누르면 나오게 하기 위해서 아래로 뺴놨음.
-	// 페이지가 로드 되면 1번 실행 되게 해놨음
+	// 페이지가 로드 되면 function이 실행이 되도록 위에 넣어놨음
 	  function review_Fn(page, type){
 	    
-	    // page는 페이징 번호이고, type는 최신순인지 또는 등급순인지 
+	    // page는 페이징 번호이고, type R은 최신순, G는 등급순 
 	      let pidx =  <c:out value="${detail.pidx}"/>;
 	      if (page == null){page = 1};
 	      if (type == null){type = "R"};
@@ -823,12 +609,12 @@
 		    dataType: 'json',
 		  	type:"post",
 		  	success:function(data){
-		  	 //console.log(data);
-		  	 //console.log(data.pm.endPage);
-		  	 //console.log(data.reviewProduct_1[0]);
+		  	// console.log(data);
+		  	// console.log(data.pm.endPage);
+		  	// console.log(data.reviewProduct[0]);
 		  	 
 		  	 // 가져온 데이터를 리뷰 div에 뿌려 준다.
-		  	 let reviews = data.reviewProduct_1;
+		  	 let reviews = data.reviewProduct;
 		  	 let pm = data.pm;
 		  	 let prev = parseInt(pm.startPage - 1) ;
 		  	 let next = parseInt(pm.endPage + 1) ;
@@ -837,14 +623,32 @@
 		  	 // 리뷰 나오는 테이블 뿌려 주기
 		  	 str += "<table class='table'>";
 		  	 for (let i=0; i<reviews.length ; i++){
+		  		let grade = reviews[i].grade;
 		  	 	str += "<tr class='review_tr'>";
 			  	str += "<td style='width:5%'></td>";
 			  	str += "<td style='width:30%'>";
-			  	str += "<div id='review_box"+reviews[i].ridx+"' style='word-break:keep-all;'>"+reviews[i].contents+"</div>";
-			  	str += "<div id='review_btn"+reviews[i].ridx+"'></div>";
+			  	
+			  	// 평점 들에 대한 별 뿌려주기, 이거 줄일 수 있는 방법 있으면 줄여 주세요
+			  	if ( grade == 1 ){	
+			  		str +="<i class='bi bi-star-fill'></i>";
+			  	}else if (grade == 2){
+			  		str +="<i class='bi bi-star-fill'></i><i class='bi bi-star-fill'></i>";
+			  	}else if (grade == 3){
+			  		str +="<i class='bi bi-star-fill'></i><i class='bi bi-star-fill'></i><i class='bi bi-star-fill'></i>";
+			  	}else if (grade == 4){
+			  		str +="<i class='bi bi-star-fill'></i><i class='bi bi-star-fill'></i><i class='bi bi-star-fill'></i><i class='bi bi-star-fill'></i>";
+			  	}else if (grade == 5){
+			  		str +="<i class='bi bi-star-fill'></i><i class='bi bi-star-fill'></i><i class='bi bi-star-fill'></i><i class='bi bi-star-fill'></i><i class='bi bi-star-fill'></i>";
+			  	}
+			  	
+			  	// 리뷰 내용과 아래 접기 열기 버튼 뿌려주기
+			  	str += "<div id='review_box"+reviews[i].ridx+"' style='word-break:break-all;'>"+reviews[i].contents+"</div>";
+			  	str += "<div id='review_btn"+reviews[i].ridx+"' onclick='btn_more("+reviews[i].ridx+")'></div>";
 			  	str += "</td>";
 			  	str += "<td style='width:10%'></td>";
 			  	str += "<td style='width:30%'>"
+				
+			  	// 이미지 뿌려주기, !=null 이 안먹혀서 ==null 로 작업 함
 			  	if(reviews[i].image1 == null || reviews[i].image1 == ""){
 			  	  str += "";
 			  	}else{
@@ -856,58 +660,514 @@
 				  	  str += "<img class='review-image1 img-thumbnail' src='/resources/review_img/"+reviews[i].image2+"'>";   
 				}
 			  	str += "</td>";
-			  	let name = reviews[i].uname.slice(0,-1);
-			  	let name1 = name+"*";
+			  	let name = reviews[i].uname.slice(0,-2);
+			  	let name1 = name+"**";
 			  	str += "<td style='width:10%'>"+name1+"</td>";
 		  	 	str += "</tr>";
 		  	 }
 		  	 str += "</table><br>";
 		  	 
 		  	 // 페이징 할 수 있는 번호 나오는 곳 뿌려 주기
-		  	 str += "<nav aria-label='Page navigation example'>";
+		  	 str += "<nav aria-label='Page navigation'>";
 		  	 str += "<ul class='pagination justify-content-center'>";
-		  	 str += "<li class='page-item disabled'>";
+		  	 str += "<li class='page-item'>";
+		  	 //console.log(prev);
 		  	 if (pm.prev == true){
-		  	     str += "<a class='page-link' onclick='review_Fn("+prev+",\""+type+"\")'>이전</a>";
+		  	     str += "<a class='page-link' aria-label='Previous' onclick='review_Fn("+prev+",\""+type+"\")'><span aria-hidden='true' class='pointer' >&laquo;</span></a>";
 		  	 }
 		  	 str += "</li>";
 		  	 let startPage = parseInt(pm.startPage);
 		  	 let endPage = parseInt(pm.endPage);
 		  	 for (let k = startPage; k<=endPage; k++ ){
-		  	 	str += "<li class='page-itme'><a class='page-link' onclick='review_Fn("+k+",\""+type+"\")'>"+k+"</a>&ensp;";      
+		  		if(k == pm.scri.page){
+		  		 	str += "<li class='page-item active'><a class='page-link pointer' onclick='review_Fn("+k+",\""+type+"\")'>"+k+"</a>";
+		  		}else{
+		  			str += "<li class='page-item'><a class='page-link pointer' onclick='review_Fn("+k+",\""+type+"\")'>"+k+"</a>";
+		  		}
 		  	 }
 		  	 str += "<li class='page-item'>";
 		  	 if(pm.next && pm.endPage > 0){
-		  	     str += "<a class='page-link' onclick='review_Fn("+next+",\""+type+"\")'>다음</a>";
+		  	     str += "<a class='page-link' aria-label='Next' onclick='review_Fn("+next+",\""+type+"\")'><span aria-hidden='true' class='pointer'>&raquo;</span></a>";
 		  	 }
 		  	 str += "</li>";
 		  	 str += "</ul>";
 		  	 str += "</nav>";
+		  	
+		  	// 리뷰 div에 모든 내용 뿌려주기
+		  	$("#review_table").html(str);
 		  	 
-		  	 $("#review_table").html(str);
-		  	 
+		  	
+			// 리뷰가 길면 자르고 더보기 버튼을 추가하고 그렇지 않으면 그대로 둔다.
+			// .offsetHeight >90  보여지는 부분이 90px를 넘어가면, 보여지는 높이 조절하기 어려움 clientHeight
+			// .length >= 100  텍스트 길이가 100보다 크거나 같으면
+			// .split('\n').length; 줄바꿈이 되었을 때 줄바꿈 안하면 소용이 없음
+			// word-break: keep-all; 한글일 경우 띄어쓰기 기준으로 줄바꿈 해줌 스타일로 적용
+		  	for (let m=0; m<reviews.length ; m++){
+		  	let ridx = reviews[m].ridx;
+		  	let re = $("#review_box"+ridx);
+		  	let re_txt = $("#review_box"+ridx).text();
+		    let re_height = document.getElementById("review_box"+ridx).clientHeight;
+		 	//console.log(re_txt);
+		    //console.log(re_height);
+		    let re_html = $("#review_box"+ridx).html();
+		    let re_txt_short = re_txt.substring(0,60)+"...";
+		  	
+		 	// 더보기 버튼 추가 void(0)는 이동을 하지 않고 그곳에서 만 움직이겠다는 뜻
+		    let btn_more = $('<a href="javascript:void(0)" class="more" style="text-decoration:none;">더보기</a>');
+		    $("#review_btn"+ridx).append(btn_more);
+		    
+		 	// 텍스트 길이가 길면 자르고 길이가 짧으면 더보기 버튼을 감춘다.
+		   		if(re_height >= 70){
+			  		re.html(re_txt_short);
+		                
+		    	}else {
+		            btn_more.hide()
+		    	}
+		 	
+		 	// 더보기 버튼 클릭할 때 작동하는 function 만들기
+	   		btn_more.click(toggle_content);
+		      
+	            function toggle_content(){
+	                if($(this).hasClass('short')){
+	                    // 접기 상태
+	                    $(this).text('더보기');
+	                    re.html(re_txt_short); // 텍스트 자르기
+	                    $(this).removeClass('short');
+	                }else{
+	                    // 더보기 상태
+	                    $(this).text('접기');
+	                    re.html(re_html); // 텍스트 크기 원상복귀
+	                    $(this).addClass('short');
+	                }
+	          	}
+	            
+		  	}
 		  	 
 		  	},
 		  	error:function(){
 		  	    alert("리뷰 뿌려주기 에러입니다.");
 		  	}
 	      });
-	  }
+	 }
+
 	
 	
-	// 하트버튼 누르면 관심상품에 넣고 다시 누르면 빼고
+    /*   제이쿼리를 활용해서 문의 페이징 뿌려주기 */
+  	// 누르면 나오게 하기 위해서 아래로 뺴놨음.
+  	// 페이지가 로드 되면 function이 실행이 되도록 위에 넣어놨음
+  	  function question_Fn(page){
+  	    
+  	      let pidx =  <c:out value="${detail.pidx}"/>;
+  	      if (page == null){page = 1};
+  	      
+  	      $.ajax({
+  		  	url:"detail_question.do",
+  		    data:{"pidx":pidx, "page":page},
+  		    dataType: 'json',
+  		  	type:"post",
+  		  	success:function(data){
+  		  	 
+  		  	 // 가져온 데이터를 문의 div에 뿌려 준다.
+  		  	 let question = data.questionProduct;
+  		  	 let pm = data.pm;
+  		  	 let prev = parseInt(pm.startPage - 1) ;
+  		  	 let next = parseInt(pm.endPage + 1) ;
+  		  	 let str = "";
+  		  	 
+  		  	 // 문의 해더 작성
+  		  	 str += "<table class='table'>";
+  		  	 str += "<thead>";
+  		  	 str += "<tr class='text_align'>";
+  		  	 str += "<th style='width:6%;'>번호</th>";
+  		  	 str += "<th style='width:70%;'>제목</th>";
+  		  	 str += "<th style='width:12%;'>작성자</th>";
+  		  	 str += "<th>작성일</th>";
+  		  	 str += "</tr>";
+  		  	 str += "</thead>";
+  		  	 str += "<tbody>";
+  		  	 for (let i=0; i<question.length ; i++){
+  			  	
+  		  		// 문의 내용 뿌려주기
+  			  	str += "<tr>";
+  			  	str += "<td class='text_align'>"+(i+1)+"</td>";
+  			  	
+  			  	if (question[i].depth == 0) {
+  			  		str += "<td class='pointer' onclick='question_title("+question[i].pqidx+","+question[i].midx+")'>"+question[i].title+"</td>";
+  			  	}
+  			  	if (question[i].depth == 1) {
+    			  	str += "<td class='pointer' onclick='question_title("+question[i].pqidx+","+question[i].midx+")'><i class='bi bi-arrow-return-right'></i> "+question[i].title+"</td>";
+    			}
+  			  	let name = question[i].uname.slice(0,-2);
+			  	let name1 = name+"**";
+  			  	str += "<td class='text_align'>"+name1+"</td>";
+  			  	let date = question[i].rdate.slice(0,10);
+  			  	str += "<td class='text_align'>"+date+"</td>";
+  			  	str += "</tr>";
+
+  		  	 }
+  		  	 str += "</tbody>"
+  		  	 str += "</table>";
+  		  	 str += "<button type='button' class='btn btn-danger' id='btn-question' onclick='location.href=\"/Customer/product.do?pidx="+pidx+"\"'>상품문의하기</button><br><br>";
+  		  	 
+  		  	 // 페이징 할 수 있는 번호 나오는 곳 뿌려 주기
+  		  	 str += "<nav aria-label='Page navigation'>";
+  		  	 str += "<ul class='pagination justify-content-center'>";
+  		  	 str += "<li class='page-item'>";
+  		  	 //console.log(prev);
+  		  	 if (pm.prev == true){
+  		  	     str += "<a class='page-link' aria-label='Previous' onclick='question_Fn("+prev+")'><span aria-hidden='true' class='pointer' >&laquo;</span></a>";
+  		  	 }
+  		  	 str += "</li>";
+  		  	 let startPage = parseInt(pm.startPage);
+  		  	 let endPage = parseInt(pm.endPage);
+  		  	 for (let k = startPage; k<=endPage; k++ ){
+  		  		if ( k == pm.scri.page){ 
+  		 	 	 	str += "<li class='page-item active'><a class='page-link pointer' onclick='question_Fn("+k+")'>"+k+"</a></li>";  
+  		  		}else {
+  		  			str += "<li class='page-item'><a class='page-link pointer' onclick='question_Fn("+k+")'>"+k+"</a></li>"; 
+  		  		}
+  		  	 }
+  		  	 str += "<li class='page-item'>";
+  		  	 if(pm.next && pm.endPage > 0){
+  		  	     str += "<a class='page-link' aria-label='Next' onclick='question_Fn("+next+")'><span aria-hidden='true' class='pointer'>&raquo;</span></a>";
+  		  	 }
+  		  	 str += "</li>";
+  		  	 str += "</ul>";
+  		  	 str += "</nav>";
+  		  	 
+  		  	
+  		  	// 리뷰 div에 모든 내용 뿌려주기
+  		  	$("#detail-Inquiry").html(str);
+  		  	 
+  		  	},
+  		  	error:function(){
+  		  	    alert("문의 뿌려주기 에러입니다.");
+  		  	}
+  	      });
+  	 }
+	
+    // 페이지 로드 하면 회원로그인 체크해서 관심상품 하트표시 하기
+  	function like(){
+  		let pidx = <c:out value="${detail.pidx}"/>;
+		$.ajax({
+			url:"/Basket/checklike.do",
+			type:"POST",
+			data:{"pidx":pidx},
+			ContentType:"application/json",
+			success:function(data){
+				if(data == ""){
+				}else{
+					$("#heart").attr("class","bi bi-suit-heart-fill");
+				}
+			},error:function(){
+				alert("관심상품존재찾기 에러!")
+			}
+		});
+	}
+  	like();
+  	
+  	//관심상품 추가
 	function heart(pidx){
-		if($("#heart").hasClass('bi bi-suit-heart-fill')==true){
-			$("#heart").attr('class','bi bi-suit-heart');
-			alert("관심상품에서 제외되었습니다.");
-			
-		}else{
-			$("#heart").attr('class','bi bi-suit-heart-fill');
-			alert("관심상품에서 추가되었습니다.");
-		}
 		
+		var uid = '${sessionScope.UserVO.id}';
+		var like = 0;
+		if(uid==""){
+			alert("로그인하셔야합니다.");
+		}else{
+			if($("#heart").hasClass("bi bi-suit-heart-fill")==true){
+			    alert("관심 상품을 취소하셨습니다.");
+				$("#heart").attr("class","bi bi-suit-heart");
+				like = 0;
+			}else{
+				$("#heart").attr("class","bi bi-suit-heart-fill");
+				alert("관심 상품에 담았습니다");
+				like = 1;
+			}
+			$.ajax({
+				url:"/Basket/like.do",
+				type:"POST",
+				data:{"yn":like,"pidx":pidx},
+				ContentType:"application/json",
+				success:function(data){
+				},error:function(){
+					alert("관심상품등록 에러!")
+				}
+			});
+		}
 	}
 	
+	
+	/* 비회원 주문하기 버튼 */
+	function nonorder(){
+		var option = $("#select-result").text();
+		var tot_price = $("#total_price_in").val();
+		var productname = "<c:out value='${detail.pname}'/>";
+		//console.log(productname);
+		
+										
+		if(option == ""){
+			alert("옵션을 선택하세요");
+		}
+		else{
+																					  
+		  let option1 = 0;
+	      let quntity = 0;
+	      let List = new Array;
+	      
+	      <c:forEach items="${options}" var="options">
+	      var data = new Object();
+	      
+	      option1 = <c:out value="${options.oidx}"/>;
+	     
+	      quntity = $("#add_option"+option1).text();
+	      //console.log(quntity);
+	      if (quntity != "" ){
+	         data.oidx = option1;
+	         data.quntity = quntity;
+	         List.push(data);
+	      }
+	      </c:forEach>
+	      let jsonData = JSON.stringify(List);
+	      //console.log(jsonData);
+		
+																	 
+	      var frm = document.createElement("form");
 
+	      frm.name = 'frm';
+	      frm.method = 'post';
+	      frm.action = '/Order/nonorder.do';
+	      
+	      var input1 = document.createElement("input");
+	      var input2 = document.createElement("input");
+	      var input3 = document.createElement("input");
+	     
+	      input1.setAttribute("type","hidden");
+	      input1.setAttribute("name","jsonData");
+	      input1.setAttribute("value",jsonData);
+	      input2.setAttribute("type","hidden");
+	      input2.setAttribute("name","productname");
+	      input2.setAttribute("value",productname);
+	      input3.setAttribute("type","hidden");
+	      input3.setAttribute("name","tot_price");
+	      input3.setAttribute("value",tot_price);
+	      
+	      frm.appendChild(input1);
+	      frm.appendChild(input2);
+	      frm.appendChild(input3);
+	      document.body.appendChild(frm);
+			frm.submit();
+	      
+		}
+	}
+	
+	
+	/* 회원주문하기  */
+	function memberorder(){
+		var option = $("#select-result").text();
+		var tot_price = $("#total_price_in").val();
+		var productname = "<c:out value='${detail.pname}'/>";
+		
+		if(option == ""){
+			alert("옵션을 선택하세요");
+		}
+		else{
+		  let option1 = 0;
+	      let quntity = 0;
+	      let List = new Array;
+	      
+	      <c:forEach items="${options}" var="options">
+	      var data = new Object();
+	      
+	      option1 = <c:out value="${options.oidx}"/>;
+	     
+	      quntity = $("#add_option"+option1).text();
+	      //console.log(quntity);
+	      if (quntity != "" ){
+	         data.oidx = option1;
+	         data.quntity = quntity;
+	         List.push(data);
+	      }
+	      </c:forEach>
+	      let jsonData = JSON.stringify(List);
+	      //console.log(jsonData);
+		
+	      var frm = document.createElement("form");
+	      frm.name = 'frm';
+	      frm.method = 'post';
+	      frm.action = '/Order/memberorder.do';
+	      
+	      var input1 = document.createElement("input");
+	     
+	      var input3 = document.createElement("input");
+	    
+	      var input6 = document.createElement("input");
+	     
+	      input1.setAttribute("type","hidden");
+	      input1.setAttribute("name","jsonData");
+	      input1.setAttribute("value",jsonData);
+	      
+	      input3.setAttribute("type","hidden");
+	      input3.setAttribute("name","tot_price");
+	      input3.setAttribute("value",tot_price);
+	   
+	      input6.setAttribute("type","hidden");
+	      input6.setAttribute("name","productname");
+	      input6.setAttribute("value",productname);
+	      
+	      frm.appendChild(input1);
+	     
+	      frm.appendChild(input3);
+	     
+	      frm.appendChild(input6);
+	      document.body.appendChild(frm);
+			frm.submit();
+	      
+		}
+	}
+	
+	
+	/* 문의하기 제목을 클릭할 시 비밀번호 입력 모달창 나오게 */
+	function question_title(pqidx,midx){
+		
+		// 로그인을 안했을 경우 로그인 하라는 창 띄우기
+		let umidx= "${sessionScope.UserVO.midx}";
+		let uid= "${sessionScope.UserVO.id}";
+		if(uid == ""){
+			alert("로그인을 해주세요");
+		
+		// 로그인을 했지만 다른 사람의 문의 글을 클릭 했을 경우 
+		}else if ( umidx != midx){
+			alert("다른사람의 글입니다");
+			
+		}else {
+		
+		// 누를 때 마다 전에 입력 했던 값 없애고, 경고 문구 사라지게
+		$("#question_pwd").val("");
+		$("#pwd_chcek").text("").hide();
+		
+		// 비밀번호를 입력하라고 하는 모달창 보이게 하기
+		$("#question_motal").modal("show");
+		
+		// 확인 버튼을 눌렀을 때
+		$("#modal_button").click(function(){
+			var pwd = $("#question_pwd").val();
+			//console.log(pwd);
+			// 입력값이 업을 경우
+			if(pwd == ""){
+				$("#pwd_chcek").text("*입력해주세요").css("color","red").show();
+			}
+			// 입력 값이 있을 경우 에이작스 통신하기
+			else{
+				 $.ajax({
+					url:"/Customer/detail_question.do",
+					data:{"pqidx":pqidx, "pwd":pwd},
+					dataType:"JSON",
+					type:"POST",
+					success:function(data){
+						//console.log(data);
+						// 암호입력하는 모달창 닫기
+						$("#question_motal").modal("hide");
+						
+						// 모달창에 뿌려주는 내용 입력, 타이들과 내용
+						let str = "";
+						str +="<h5>"+data.title+"</h5>";
+						str += data.comments;
+						$("#question_contents").html(str);
+						
+						// 답변이 완료된 문의하기는 수정버튼이 없고, 답변 미완료된 문의하기만 수정버튼이 존재
+						let str1 = "";
+						if (data.state == "N"){
+							str1 += "<button type='button' class='btn btn-secondary' onclick='location.href=\"/Customer/product_modify.do?pqidx="+pqidx+"\"'>수정하기</button>";
+							str1 += "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal' id='modal_button2'>확인</button>";
+							$("#modal_requestion").html(str1);
+						}else if (data.state == "Y"){
+							str1 += "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal' id='modal_button2'>확인</button>";
+							$("#modal_requestion").html(str1);
+						}
+						
+						// 새로운 모달 창 띄우기
+						$("#question_motal1").modal("show");
+					},
+					error:function(){
+						$("#pwd_chcek").text("*비밀번호가 잘못되었습니다.").css("color","red").show();
+					}
+				 });
+			} 
+		});
+		
+		}
+	}
+
+
+	/* 장바구니 담기*/
+	function cart(){
+		var option = $("#select-result").text();
+		var oname1 = $(".option_tb1").text();
+		var oname = oname1.trim();
+		let midx = "${sessionScope.UserVO.midx}";
+		//console.log("oname>>>>>>>"+oname);
+		if(option == ""){
+			alert("옵션을 선택하세요");
+		}
+		else{
+		  let option1 = 0;
+	      let quntity = 0;
+	     
+	      let List = new Array;
+	      <c:forEach items="${options}" var="options">
+	      var data = new Object();
+	      option1 = <c:out value="${options.oidx}"/>;
+	      quntity = $("#add_option"+option1).text();
+	     
+	      if (quntity != "" ){
+	    	data.oname = oname;
+	         data.oidx = option1;
+	         data.quntity = quntity;
+	         List.push(data);
+	      }
+	      </c:forEach>
+	     
+	      let jsonData = JSON.stringify(List);
+	      let Json = JSON.parse(jsonData);
+	   		//console.log(Json);
+				
+		var str = "";
+		var formData2 = "";
+		for(let i =0 ; i<Json.length ; i++){
+			str += "<form name='fm"+i+"'>";
+		    var oidx = Json[i].oidx;
+		    var quantity = Json[i].quntity;
+		    var oname = Json[i].oname;
+		    
+		    str += "<input type='hidden' name='midx' value='"+midx+"'>";
+		    str += "<input type='hidden' name='oname' value='"+oname+"'>";
+			str += "<input type='hidden' name='oidx' value='"+oidx+"'>";
+			str += "<input type='hidden' name='quantity' value='"+quantity+"'>";
+			str += "</form>";
+			$("#form2").html(str);
+			formData2 = $("form[name=fm"+i+"]").serialize();
+			//console.log(formData2);
+			
+			 $.ajax({
+					url:"/Basket/cartinsert.do",
+					type:"POST",
+					data:formData2,
+					async: false,
+					ContentType:"application/json",
+					success:function(data){
+						if(data=="save"){
+							alert("장바구니에 담겼습니다");
+						}else{
+							alert(data+' 상품이 장바구니에 존재합니다');
+						}
+					},
+					error:function(){
+						alert("실행오류");
+					}
+				});
+			}
+		}
+	}
+	
 </script>
 </html>

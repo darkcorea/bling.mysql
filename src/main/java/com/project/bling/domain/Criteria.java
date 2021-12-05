@@ -2,16 +2,39 @@ package com.project.bling.domain;
 
 public class Criteria {
 
-	private int page;
-	// 게시판 화면에 표현될 게시글의 갯수 ,물건을 보여주는 매핑이 많은거 같아서 기본값을 9로 잡음
-	private int perPageNum = 9;
-	
-	// 검색 기능 추가 서치랑 같이 넣어줌
+	// 검색 기능만 있음
 	private String searchType;
 	private String keyword;
+	private String kind;
+	private int price;
+	private int start_price;
+	private int last_price;
 	
-	
-	
+
+	public String getKind() {
+		return kind;
+	}
+	public void setKind(String kind) {
+		this.kind = kind;
+	}
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	public int getStart_price() {
+		return start_price;
+	}
+	public void setStart_price(int start_price) {
+		this.start_price = start_price;
+	}
+	public int getLast_price() {
+		return last_price;
+	}
+	public void setLast_price(int last_price) {
+		this.last_price = last_price;
+	}
 	public String getSearchType() {
 		return searchType;
 	}
@@ -24,19 +47,5 @@ public class Criteria {
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
 	}
-	public int getPage() {
-		return page;
-	}
-	public void setPage(int page) {
-		this.page = page;
-	}
-	public int getPerPageNum() {
-		return perPageNum;
-	}
-	public void setPerPageNum(int perPageNum) {
-		this.perPageNum = perPageNum;
-	}
-	
-	
 	
 }

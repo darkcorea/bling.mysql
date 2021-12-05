@@ -8,33 +8,47 @@ import org.springframework.stereotype.Service;
 import com.project.bling.dao.ReviewDAO;
 import com.project.bling.domain.PageMaker;
 import com.project.bling.vo.CombineVO;
+import com.project.bling.vo.ReviewVO;
 
 @Service("ReviewService")
 public class ReviewServiceImpl implements ReviewService {
 
 	@Autowired
 	ReviewDAO reviewDAO;
-
+	
+	// 제품에 대한 리뷰 평점, 이미지 가져오기
 	@Override
 	public int reviewCount(int pidx) throws Exception {
 		return reviewDAO.reviewCount(pidx);
 	}
-
-	@Override
-	public List<CombineVO> reviewPaging(PageMaker pm) throws Exception {
-		return reviewDAO.reviewPaging(pm);
-	}
 	
-	// 상품에 대한 리뷰 갯수 최신순 
+	
+	// 제품에 대한 리뷰 평점, 이미지 가져오기
+	@Override
+	public List<ReviewVO> Product_review_count(int pidx) throws Exception {
+		return reviewDAO.Product_review_count(pidx);
+	}
+
+	// 제품에 대한 리뷰 페이징 가져 오기, 최신순
 	@Override
 	public List<CombineVO> reviewProduct_1(PageMaker pm) throws Exception {
 		return reviewDAO.reviewProduct_1(pm);
 	}
-	
-	// 상품에 대한 리뷰 갯수 평점순
+
+	// 제품에 대한 리뷰 페이징 가져오기, 평점순
 	@Override
 	public List<CombineVO> reviewProduct_2(PageMaker pm) throws Exception {
 		return reviewDAO.reviewProduct_2(pm);
+	}
+	
+	
+	//myPage reviewList
+	@Override
+	public List<CombineVO> reviewList(CombineVO vo) throws Exception {
+		//System.out.println("마이페이지 서비스-구매일1 : "+vo.getRdate1());
+		//System.out.println("마이페이지 서비스-구매일1 : "+vo.getRdate2());
+		//System.out.println("마이페이지 서비스-midx : "+vo.getMidx());
+		return reviewDAO.reviewList(vo);
 	}
 	
 }

@@ -12,21 +12,36 @@
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
 
+	<!-- 리소스 설정 -->
+	<!-- mapping : 가상 경로(상대경로), location : 리소스가 실제로 저장된 경로 -->
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
 	<resources mapping="/js/**" location="/resources/js/" />
 	<resources mapping="/css/**" location="/resources/css/" />
 	
+	<!-- spring-donwload bean -->
+	<beans:bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+	    <beans:property name="order" value="0" />
+	</beans:bean>
+	<beans:bean id="downloadView" class="com.project.bling.utils.DownloadView" />
+	<!-- /spring-donwload bean -->
+
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" /><!--경로-->
 		<beans:property name="suffix" value=".jsp" /><!--확장자-->
+		<beans:property name="order" value="1" /> <!-- InternalResourceViewResolver의 order 순서를 1로 변경 -->
 	</beans:bean>
+
 	
 	<context:component-scan base-package="com.project.bling.controller" />
 	<context:component-scan base-package="com.project.bling.service" />
 	<context:component-scan base-package="com.project.bling.dao" />
+	<!-- 관리자 전용 -->
+	<context:component-scan base-package="com.project.bling.ad_controller" />
+	<context:component-scan base-package="com.project.bling.ad_service" />
+	<context:component-scan base-package="com.project.bling.ad_dao" />
 	
 	<context:annotation-config />
 	<!-- 스프링 프레임워크가 쓰는 시스템의 정보를 쓴다-->
@@ -36,5 +51,37 @@
 		<beans:property name="maxUploadSize" value="10485760"/><!-- 10MB -->
 		<beans:property name="defaultEncoding" value="utf-8" />
 	</beans:bean>
+
+	<!-- 인터셉터 bean 설정 -->
+	<!-- 사용자 세션체크 bean -->
+	<beans:bean id="loginInterceptor" class="com.project.bling.interceptor.LoginInterceptor"/>
+	<!-- 관리자 세션체크 bean -->
+	<beans:bean id="adminInterceptor" class="com.project.bling.interceptor.AdminInterceptor"/>
+	<!-- 인터셉터 매핑정보 -->
+	<interceptors>
+		<!-- 관리자 세션체크 매핑-->
+		<interceptor>
+			<mapping path="/Ad_Main/main.do"/>
+			<mapping path="/Ad_regist/list.do"/>
+			<mapping path="/Ad_regist/regist.do"/>
+			<mapping path="/Ad_regist/registPro.do"/>
+			<mapping path="/Ad_regist/insertOpt.do"/>
+			<mapping path="/Ad_regist/insertImg.do"/>
+			<beans:ref bean="adminInterceptor"/>
+		</interceptor>
+		<!-- 사용자 세션체크 매핑 -->
+		<interceptor>
+			<mapping path="/MyPage/main.do"/>
+			<mapping path="/Basket/cart.do"/>
+			<!-- 관심상품  -->
+			<mapping path="/Basket/like1.do"/>
+			<!-- 고객센터 또는 디테일,마이페이지에서  상품,일반문의, 문의수정하기 -->
+			<mapping path="/Customer/product.do"/>
+			<mapping path="/Customer/question.do"/>
+			<mapping path="/Customer/product_modify.do"/>
+			<beans:ref bean="loginInterceptor"/>
+		</interceptor>
+	</interceptors>
+	
 	
 </beans:beans>

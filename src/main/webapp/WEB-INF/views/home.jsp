@@ -1,8 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 <html>
 <head>
 	<meta charset="UTF-8">
@@ -17,23 +17,30 @@
 <style>
 
 	/* 전반적인 크기에 관한 설정 */
-	section, header {
+	section {
 		max-width:1008px;
 		margin:  0px auto;
 	}
 	
 	/* 빈 하트 아이콘, 꽉찬 하트 아이콘  */
 	.bi-suit-heart, .bi-suit-heart-fill {
-		font-size:27px;
+		font-size:25px;
 		color:red;
 		float: right;
-		padding:5px;
+		padding: 0px 5px;
 	}
 	
 	/* 이벤트민 공지사항 관련 */
-	#event,#notice{
+	#event{
 		height: 256px;
 		background-color: #C4C4C4;
+	}
+	#notice{
+		height: 256px;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		border:1px solid #cb7878;
+		border-radius:10px;
 	}
 	#eventDiv{
 		padding-right: 100px;
@@ -54,25 +61,41 @@
 	#text_1{
 			height: 29px;
 	}
-</style>	
+	#botCarouselBtn{
+		background-color: #CB7878;
+	}
+</style>
+<script>
+/*하트 표시하는 에이작스 통신*/
+function like(pidx){
+		$.ajax({
+			url:"/Basket/checklike.do",
+			type:"POST",
+			data:{"pidx":pidx},
+			async: false,
+			ContentType:"application/json",
+			success:function(data){
+				if(data == ""){
+				}else{
+					$(".emptyHeart"+pidx).attr("class","bi bi-suit-heart-fill emptyHeart"+pidx);
+				}
+			},error:function(){
+				alert("관심상품존재찾기 에러!")
+			}
+		});
+	}
+</script>
 </head>
 
-<body>
-	<a href="/Admin/list.do">관리자 상품 리스트</a><br>
-	<a href="/Admin/regist.do">관리자 상품 등록</a><br>
-	<a href="/Review/list.do?page=1">페이징 완료</a><br>
-	
 <header>
 	<%@ include file="/WEB-INF/views/header.jsp" %><br><br>
 </header>
-
-	
 	<!-- carousel -->
 	<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
 		<div class="carousel-indicators">
-		<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-		<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-		<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+		<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1" id="botCarouselBtn"></button>
+		<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2" id="botCarouselBtn"></button>
+		<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3" id="botCarouselBtn"></button>
 		</div>
 		<div class="carousel-inner">
 		<div class="carousel-item active">
@@ -100,7 +123,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-xl-8" id="eventDiv">
-				<span><a id="subMenu1" href="">Event</a></span>
+				<span><a id="subMenu1" href="/Event/main.do">Event</a></span>
 				<div id="carouselExampleIndicators2" class="carousel slide" data-bs-ride="carousel">
 					<div class="carousel-indicators">
 					<button type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -108,15 +131,16 @@
 					<button type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide-to="2" aria-label="Slide 3"></button>
 					</div>
 					<div class="carousel-inner">
-					<div class="carousel-item active">
-						<img src="/resources/image/event_1.png" class="d-block w-100" style="height:256px;">
-					</div>
-					<div class="carousel-item">
-						<img src="/resources/image/event_1.png" class="d-block w-100" style="height:256px;">
-					</div>
-					<div class="carousel-item">
-						<img src="/resources/image/event_1.png" class="d-block w-100" style="height:256px;">
-					</div>
+						<c:set var="event" value="${event}" />
+							<div class="carousel-item active" >
+								<a href="/Event/detail.do?eidx=${event[0].eidx}"><img src="/resources/event/${event[0].banner}" class="d-block w-100" style="height:256px;"></a>
+							</div>
+							<div class="carousel-item" >
+								<a href="/Event/detail.do?eidx=${event[1].eidx}"><img src="/resources/event/${event[1].banner}" class="d-block w-100" style="height:256px;"></a>
+							</div>
+							<div class="carousel-item">
+								<a href="/Event/detail.do?eidx=${event[2].eidx}"><img src="/resources/event/${event[2].banner}" class="d-block w-100" style="height:256px;"></a>
+							</div>
 					</div>
 					<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide="prev">
 					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -129,9 +153,13 @@
 				</div>
 			</div>
 			<div class="col-xl-4">
-				<span><a id="subMenu1" href="">Notice</a></span>
+				<span><a id="subMenu1" href="/Notice/notice_main.do">Notice</a></span>
 				<div id="notice">
-
+					<c:forEach var="notice" items="${notice}">
+						<a href="/Notice/detail.do?nidx=${notice.nidx}" class='link-dark' style='text-decoration:none'>
+							<h6>&nbsp;&middot;&nbsp;${notice.subject} &#40; ${fn:substring(notice.rdate,0,10)} &#41;</h6> 
+						</a><br>
+					</c:forEach>
 				</div>
 			</div>
 		</div>
@@ -140,7 +168,7 @@
 
 <!-- 제품 미리보기 BEST-->
 		<div class="container">
-			<span><a id="subMenu1" href="/Product/best.do">BEST</a></span><span><a id="subMenu2" href="/Product/best.do">+더보기</a></span>
+			<span><a id="subMenu1" href="/Product/best_new.do?kind=best">BEST</a></span><span><a id="subMenu2" href="/Product/best_new.do?kind=best">+더보기</a></span>
 			<br>
 			<div class="row" id="prodRow">
 				<c:forEach items="${best}" var="best" begin="0" end="2">
@@ -181,6 +209,7 @@
 									<span class="text-gray-500 fw-bold fs-3"><fmt:formatNumber value="${best.price}" pattern="#,###" />원</span>
 									</c:when>
 								</c:choose>
+								<script>like(${best.pidx});</script>
 								</div><br><br>
 							</div>
 						</div>
@@ -193,7 +222,7 @@
 	
 	<!-- 제품 미리보기 NEW-->
 		<div class="container">
-			<span><a id="subMenu1" href="/Product/new.do">NEW</a></span><span><a id="subMenu2" href="/Product/new.do">+더보기</a></span>
+			<span><a id="subMenu1" href="/Product/best_new.do?kind=new">NEW</a></span><span><a id="subMenu2" href="/Product/best_new.do?kind=new">+더보기</a></span>
 			<br>
 			<div class="row" id="prodRow">
 				<c:forEach items="${newProd}" var="newProd" begin="0" end="5">
@@ -230,6 +259,7 @@
 									&nbsp;&nbsp;<span class="text-gray-500 fw-bold fs-3"><fmt:formatNumber value="${newProd.price}" pattern="#,###" />원</span>
 									</c:when>
 									</c:choose>
+									<script>like(${newProd.pidx});</script>
 								</div><br><br>
 							</div>
 						</div>
@@ -241,8 +271,8 @@
 	
 	<!-- 제품 종류 Ring-->
 		<div class="container">
-			<span><a id="subMenu1" href="/Product/ring.do?orderBy=1">반지</a></span>
-			<span><a id="subMenu2" href="/Product/ring.do?orderBy=1">+더보기</a></span>
+			<span><a id="subMenu1" href="/Product/sroll.do?kind=R">반지</a></span>
+			<span><a id="subMenu2" href="/Product/sroll.do?kind=R">+더보기</a></span>
 			<br>
 			<div class="row" id="prodRow">
 				<c:forEach items="${ring}" var="ring" begin="0" end="2">
@@ -278,6 +308,7 @@
 									&nbsp;&nbsp;<span class="text-gray-500 fw-bold fs-3"><fmt:formatNumber value="${ring.price}" pattern="#,###" />원</span>
 									</c:when>
 								</c:choose>
+								<script>like(${ring.pidx});</script>
 								</div><br><br>
 							</div>
 						</div>
@@ -291,7 +322,7 @@
 	</section>
 <!-- middle banner -->
 	<div>
-		<img src="/resources/simage/SS21-Slide05.jpg" class="w-100">
+		<img src="/resources/simage/middle banner.jpg" class="w-100">
 	</div>
 	<br><br><br>
 	
@@ -299,8 +330,8 @@
 	<section>
 	<!-- 제품 종류 Necklace-->
 		<div class="container">
-			<span><a id="subMenu1" href="/Product/necklace.do?orderBy=1">목걸이</a></span>
-			<span><a id="subMenu2" href="/Product/necklace.do?orderBy=1">+더보기</a></span>
+			<span><a id="subMenu1" href="/Product/sroll.do?kind=N">목걸이</a></span>
+			<span><a id="subMenu2" href="/Product/sroll.do?kind=N">+더보기</a></span>
 			<br>
 			<div class="row" id="prodRow">
 				<c:forEach items="${neck}" var="neck" begin="0" end="2">
@@ -336,6 +367,7 @@
 									&nbsp;&nbsp;<span class="text-gray-500 fw-bold fs-3"><fmt:formatNumber value="${neck.price}" pattern="#,###" />원</span>
 									</c:when>
 								</c:choose>
+								<script>like(${neck.pidx});</script>
 								</div><br><br>
 							</div>
 						</div>
@@ -347,8 +379,8 @@
 	
 	<!-- 제품 종류 Earring-->
 		<div class="container">
-			<span><a id="subMenu1" href="/Product/earring.do?orderBy=1">귀걸이</a></span>
-			<span><a id="subMenu2" href="/Product/earring.do?orderBy=1">+더보기</a></span>
+			<span><a id="subMenu1" href="/Product/sroll.do?kind=E">귀걸이</a></span>
+			<span><a id="subMenu2" href="/Product/sroll.do?kind=E">+더보기</a></span>
 			<br>
 			<div class="row" id="prodRow">
 				<c:forEach items="${ear}" var="ear" begin="0" end="2">
@@ -384,6 +416,7 @@
 									&nbsp;&nbsp;<span class="text-gray-500 fw-bold fs-3"><fmt:formatNumber value="${ear.price}" pattern="#,###" />원</span>
 									</c:when>
 									</c:choose>
+									<script>like(${ear.pidx});</script>
 								</div><br>
 							</div>
 						</div>
@@ -395,8 +428,8 @@
 		
 	<!-- 제품 종류 Bracelet-->
 		<div class="container">
-			<span><a id="subMenu1" href="/Product/braclet.do?orderBy=1">팔찌</a></span>
-			<span><a id="subMenu2" href="/Product/braclet.do?orderBy=1">+더보기</a></span>
+			<span><a id="subMenu1" href="/Product/sroll.do?kind=B">팔찌</a></span>
+			<span><a id="subMenu2" href="/Product/sroll.do?kind=B">+더보기</a></span>
 			<br>
 			<div class="row" id="prodRow">
 				<c:forEach items="${brac}" var="brac" begin="0" end="2">
@@ -432,6 +465,7 @@
 									&nbsp;&nbsp;<span class="text-gray-500 fw-bold fs-3"><fmt:formatNumber value="${brac.price}" pattern="#,###" />원</span>
 									</c:when>
 								</c:choose>	
+								<script>like(${brac.pidx});</script>
 								</div><br><br>
 							</div>
 						</div>
@@ -447,16 +481,37 @@
 	</footer> 
 </body>
  <script>
-    /* 하트를 눌렀을 때 채워 주고 비워주고 하는 기능, 관심상품 */
-   	function heart(pidx){
-        if($(".emptyHeart"+pidx).hasClass('bi bi-suit-heart')==true){
-        	$(".emptyHeart"+pidx).attr("class","bi bi-suit-heart-fill emptyHeart"+pidx);
-	           alert("관심 상품에 담았습니다.");
-        }else{
-        	alert("관심 상품을 취소하셨습니다.");
-			$(".emptyHeart"+pidx).attr("class","bi bi-suit-heart emptyHeart"+pidx);
-        }
-	}		
+	 
+	//관심상품 추가
+		function heart(pidx){
+			
+			var uid = '${sessionScope.UserVO.id}';
+			var like = 0;
+			if(uid==""){
+				alert("로그인하셔야합니다.");
+			}else{
+				if($(".emptyHeart"+pidx).hasClass("bi bi-suit-heart-fill")==true){
+				    alert("관심 상품을 취소하셨습니다.");
+					$(".emptyHeart"+pidx).attr("class","bi bi-suit-heart emptyHeart"+pidx);
+					like = 0;
+				}else{
+					$(".emptyHeart"+pidx).attr("class","bi bi-suit-heart-fill emptyHeart"+pidx);
+					alert("관심 상품에 담았습니다");
+					like = 1;
+				}
+				$.ajax({
+					url:"/Basket/like.do",
+					type:"POST",
+					data:{"yn":like,"pidx":pidx},
+					ContentType:"application/json",
+					success:function(data){
+						console.log(data);
+					},error:function(){
+						alert("관심상품등록 에러!")
+					}
+				});
+			}
+		}		
 </script>
 
 </html>

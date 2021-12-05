@@ -3,50 +3,110 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
-<mapper namespace="bling.com.mapper.reviewMapper">
+<mapper namespace="com.project.bling.mapper.reviewMapper">
 
 	<!-- 상품의 pidx에 따라서 리뷰 갯수 가져오기  parameterType="int" -->
 	<select id="reviewCount"  parameterType="int" resultType="int">
 		SELECT count(r.ridx) as reviewCount FROM bg_review r
     	JOIN bg_order_detail od on r.detail_idx = od.detail_idx
 	    JOIN bg_option o on o.oidx = od.oidx
-	    Join bg_user u on u.midx = r.midx
 	    WHERE o.pidx = #{pidx}
 	</select>
-	
-	<!-- 페이징된 리뷰 가져오기 -->
-	<select id="reviewPaging"  parameterType="PageMaker" resultType="CombineVO">
-	<![CDATA[
-	SELECT r. ridx, r.contents, r.rdate, r.image1, r.image2, r.grade, u.uname FROM bg_review r
-        JOIN bg_order_detail od on r.detail_idx = od.detail_idx
-        JOIN bg_option o on o.oidx = od.oidx
-        Join bg_user u on u.midx = r.midx
-        WHERE o.pidx = 3
-        order by o.pidx desc
-        limit #{startPost}, #{perPageNum}
- 	]]>
- 	</select>
- 	
- 	<!-- 상품의 리뷰들 가져오기  최신순-->
-	<select id="reviewProduct_1" parameterType="PageMaker" resultType="CombineVO">
-		SELECT   r.ridx, r.grade, r.contents, r.image1, r.image2, u.uname FROM bg_review r
+
+	<!-- 상품의 리뷰 이미지와, 평점 가져오기 -->
+	<select id="Product_review_count" parameterType="int" resultType="ReviewVO">
+		SELECT  r.ridx, r.grade, r.image1, o.pidx FROM bg_review r
     	JOIN bg_order_detail od on r.detail_idx = od.detail_idx
 	    JOIN bg_option o on o.oidx = od.oidx
 	    Join bg_user u on u.midx = r.midx
 	    WHERE o.pidx = #{pidx}
-	    ORDER BY r.ridx desc
-	    limit #{startPost}, #{perPageNum}
+	    ORDER BY r.image1 asc, r.ridx desc
 	</select>
 	
+	<!-- 상품의 리뷰들 가져오기  최신순-->
+	<select id="reviewProduct_1" parameterType="PageMaker" resultType="CombineVO">
+	        SELECT r.contents, r.ridx, r.image1, r.image2, r.grade, u.uname FROM bg_review r
+	        JOIN bg_order_detail od on r.detail_idx = od.detail_idx
+	        JOIN bg_option o on o.oidx = od.oidx
+	        Join bg_user u on u.midx = r.midx
+	        WHERE o.pidx = #{pidx}
+	        order by r.ridx desc
+			Limit #{startPost},#{perPageNum}
+	</select>
 	
 	<!-- 상품의 리뷰들 가져오기  평점 높은 순-->
 	<select id="reviewProduct_2" parameterType="PageMaker" resultType="CombineVO">
-		SELECT  r.ridx, r.grade, r.contents, r.image1, r.image2, u.uname FROM bg_review r
-    	JOIN bg_order_detail od on r.detail_idx = od.detail_idx
-	    JOIN bg_option o on o.oidx = od.oidx
-	    Join bg_user u on u.midx = r.midx
-	    WHERE o.pidx = #{pidx}
-	    ORDER BY r.grade desc
-	    limit #{startPost}, #{perPageNum}
+	      SELECT r.contents, r.ridx, r.image1, r.image2, r.grade, u.uname FROM bg_review r
+	        JOIN bg_order_detail od on r.detail_idx = od.detail_idx
+	        JOIN bg_option o on o.oidx = od.oidx
+	        Join bg_user u on u.midx = r.midx
+	        WHERE o.pidx = #{pidx}
+	        order by r.grade desc, r.ridx desc
+			Limit #{startPost},#{perPageNum}
 	</select>
+	
+	<select id="reviewList" resultType="CombineVO">
+	<![CDATA[
+		WITH pi
+		     AS(
+		        SELECT p.pidx,
+		               p.pname,
+		               i.main
+		        FROM bg_product p
+		        INNER JOIN bg_image i
+		        ON p.pidx=i.pidx
+		     ),
+		     opOodR
+		     AS(
+		        SELECT op.pidx,
+		               op.oidx,
+		               op.oname,
+		               o.midx,
+		               o.rdate,
+		               od.quantity,
+		               r.ridx,
+		               r.contents,
+		               r.image1,
+		               r.image2,
+		               r.grade
+		        FROM bg_order_detail od
+		        
+		        RIGHT OUTER JOIN bg_option op
+		        ON od.oidx=op.oidx
+		        
+		        RIGHT OUTER JOIN bg_order o
+		        ON od.order_idx=o.order_idx
+		        
+		        INNER JOIN bg_review r
+		        ON od.detail_idx=r.detail_idx
+		     )
+		SELECT opOodR.ridx,
+		       pi.main,
+		       pi.pname,
+		       opOodR.oname,
+		       opOodR.quantity,
+		       opOodR.contents,
+		       opOodR.image1,
+		       opOodR.image2,
+		       opOodR.grade,
+		       opOodR.rdate
+		FROM pi
+		LEFT OUTER JOIN opOodR
+		ON pi.pidx=opOodR.pidx
+		WHERE opOodR.midx=#{midx}
+		]]>
+		<if test='kind == "A"'><![CDATA[AND opOodR.rdate >= to_char(sysdate)]]></if>
+		<if test='kind == "B"'><![CDATA[AND opOodR.rdate >= to_char(add_months(sysdate,-1))]]></if>
+		<if test='kind == "C"'><![CDATA[AND opOodR.rdate >= to_char(add_months(sysdate,-3))]]></if>
+		<if test='kind == "D"'><![CDATA[AND opOodR.rdate >= to_char(add_months(sysdate,-6))]]></if>
+		<if test='kind == "E"'><![CDATA[AND opOodR.rdate >= to_char(sysdate-365)]]></if>
+		<if test='kind == "F"'><![CDATA[AND opOodR.rdate >= to_char(sysdate-(365*3))]]></if>
+		<if test='kind == "G"'>AND opOodR.rdate BETWEEN TO_DATE(#{rdate1},'YYYY-MM-DD') AND TO_DATE(#{rdate2},'YYYY-MM-DD')</if>
+		
+		<![CDATA[
+		ORDER BY opOodR.ridx
+		DESC
+		]]>
+	</select>
+	
 </mapper>
